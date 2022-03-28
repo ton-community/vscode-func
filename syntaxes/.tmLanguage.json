@@ -1,0 +1,91 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "FunC",
+	"foldingStartMarker": "\\{\\s*$",
+	"foldingStopMarker": "^\\s*\\}",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#numeric"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#storage"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#variables"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.",
+				"match": "\\b(if|while|for|return|impure|method_id|forall|asm|inline|inline_ref)\\b"
+			}, {
+				"name": "keyword.operator",
+				"match": "(([><=\\*]=)|[\\*\\-+><\\^=])"
+			}, {
+				"name": "keyword.other",
+				"match": "\\b(false|true)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.",
+			"begin": "\"",
+			"end": "\""
+		},
+		"numeric": {
+			"name": "constant.numeric",
+			"match": "(-?([\\d]+|0x[\\da-fA-F]+))\\b"
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line",
+					"match": ";;(.*)"
+				},
+				{
+					"name": "comment.block",
+					"begin": "{-",
+					"end": "-}"
+				}
+			]
+		},
+		"storage": {
+			"patterns": [{
+				"name": "storage.type",
+				"match": "\\b(var|int|slice|cell|builder|cont|_)\\b"
+			}, {
+				"name": "storage.modifier",
+				"match": "\\b(global)\\b"
+			}]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"match": "(?!\")(`([^`]+)`|(?=_[\\w\\d]*)(_(?<alwd>[^;,\\[\\]\\(\\)\\s~.\\{\\}]+))|(?![_`][\\w\\d]*)\\g<alwd>)",
+					"name": "variable.name"
+				}
+			]
+		},
+		"functions": {
+			"patterns": [
+				{
+					"match": "(?!\")(`([^`]+)`|(?=_[\\w\\d]*)(_(?<alwd>[^;,\\[\\]\\(\\)\\s~.\\{\\}]+))|(?![_`][\\w\\d]*)\\g<alwd>)(?=[\\(])",
+					"name": "entity.name.function"
+				}
+			]
+		}
+	},
+	"scopeName": "source.func"
+}

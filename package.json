@@ -1,0 +1,25 @@
+{
+    "name": "func-vscode",
+    "displayName": "func-vscode",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.65.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "func",
+            "aliases": ["FunC", "func"],
+            "extensions": [".fc",".func"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "func",
+            "scopeName": "source.func",
+            "path": "./syntaxes/.tmLanguage.json"
+        }]
+    }
+}
