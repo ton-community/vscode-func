@@ -4,22 +4,48 @@
     "description": "",
     "version": "0.0.1",
     "engines": {
-        "vscode": "^1.65.0"
+        "vscode": "^1.32.0"
     },
+    "activationEvents": [
+        "*"
+    ],
     "categories": [
         "Programming Languages"
     ],
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "lint": "eslint . --ext .ts,.tsx",
+        "watch": "tsc -watch -p ./"
+    },
+    "main": "out/extension.js",
     "contributes": {
-        "languages": [{
-            "id": "func",
-            "aliases": ["FunC", "func"],
-            "extensions": [".fc",".func"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "func",
-            "scopeName": "source.func",
-            "path": "./syntaxes/.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "func",
+                "aliases": [
+                    "FunC",
+                    "func"
+                ],
+                "extensions": [
+                    ".fc",
+                    ".func"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "func",
+                "scopeName": "source.func",
+                "path": "./syntaxes/.tmLanguage.json"
+            }
+        ]
+    },
+    "dependencies": {
+        "vscode": "^1.1.37"
+    },
+    "devDependencies": {
+        "typescript": "^4.6.3"
     }
 }

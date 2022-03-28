@@ -33,7 +33,7 @@
 				"match": "\\b(if|while|for|return|impure|method_id|forall|asm|inline|inline_ref)\\b"
 			}, {
 				"name": "keyword.operator",
-				"match": "(([><=\\*]=)|[\\*\\-+><\\^=])"
+				"match": "\\s((?<un>[~\\-=])|((\\g<bin>)=)|(?<bin>([\\*\\/\\%\\&\\+\\|\\^\\<\\>])|([~\\^]\\/)|([~\\^\\/]\\%)|\\<\\<|\\>\\>|\\^\\>\\>|\\^\\<\\<|\\<==\\>))"
 			}, {
 				"name": "keyword.other",
 				"match": "\\b(false|true)\\b"
@@ -64,7 +64,7 @@
 		"storage": {
 			"patterns": [{
 				"name": "storage.type",
-				"match": "\\b(var|int|slice|cell|builder|cont|_)\\b"
+				"match": "\\b(var|int|slice|cell|builder|cont|_)\\s"
 			}, {
 				"name": "storage.modifier",
 				"match": "\\b(global)\\b"
