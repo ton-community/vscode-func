@@ -1,7 +1,8 @@
 {
     "name": "func-vscode",
-    "displayName": "func-vscode",
-    "description": " This extension enables support for FunC in VS Code.",
+    "displayName": "FunC Language Support",
+    "description": "This extension enables support for FunC in VS Code.",
+    "icon": "logo.png",
     "version": "0.0.2",
     "engines": {
         "vscode": "^1.63.0"
@@ -12,6 +13,16 @@
     "categories": [
         "Programming Languages"
     ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tonwhales/vscode-func"
+    },
+    "author": {
+        "name": "Danila Volkov (dvlkv)",
+        "email": "danila@whalescorp.com",
+        "url": "https://github.com/dvlkv"
+    },
+    "publisher": "tonwhales",
     "scripts": {
         "vscode:prepublish": "npm run compile",
 		"compile": "tsc -b",
