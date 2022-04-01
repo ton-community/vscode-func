@@ -10,6 +10,7 @@
 		"url": "https://github.com/tonwhales/vscode-func"
 	},
 	"dependencies": {
+		"chevrotain": "^10.1.2",
 		"jest": "^27.5.1",
 		"vscode-languageserver": "^7.0.0",
 		"vscode-languageserver-textdocument": "^1.0.4"
