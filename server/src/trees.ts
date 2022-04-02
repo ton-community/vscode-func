@@ -1,9 +1,9 @@
 import { LRUMap } from './utils/lruMap';
-import * as Parser from 'tree-sitter';
+import * as Parser from 'web-tree-sitter';
 import { Disposable, Position } from 'vscode-languageserver';
 import { TextDocument } from 'vscode-languageserver-textdocument';
-import * as FuncLanguage from 'tree-sitter-func-language';
 import { DocumentStore, TextDocumentChange2 } from './documentStore';
+import { language } from './parser';
 
 class Entry {
 	constructor(
@@ -65,7 +65,7 @@ export class Trees {
 			return info.tree;
 		}
 
-		this._parser.setLanguage(FuncLanguage);
+		this._parser.setLanguage(language);
 
 		try {
 			const version = documentOrUri.version;

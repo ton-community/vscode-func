@@ -15,10 +15,6 @@ let client: LanguageClient;
 
 
 export function activate(context: vscode.ExtensionContext) {
-	const serverModule = context.asAbsolutePath(
-		path.join('server', 'out', 'server.js')
-	);
-    
     startServer(context)
 }
 
@@ -42,7 +38,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			fileEvents: workspace.createFileSystemWatcher('**/.fcrc')
 		},
 		initializationOptions: {
-			// treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './server/node_modules/web-tree-sitter/tree-sitter.wasm').toString(),
+			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './server/node_modules/web-tree-sitter/tree-sitter.wasm').toString(),
 			databaseName
 		}
 	};
@@ -59,7 +55,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			options: debugOptions
 		}
 	};
-    const client = new LanguageClient(
+    client = new LanguageClient(
 		'funcServer',
 		'FunC Language Server',
 		serverOptions,

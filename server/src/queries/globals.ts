@@ -1,5 +1,6 @@
 import { parserQuery } from './utils/parserQuery';
-import * as Parser from 'tree-sitter';
+import * as Parser from 'web-tree-sitter';
+import { asLspRange } from '../utils/asLspRange';
 
 const query = parserQuery`
 (function_definition name: (function_name) @function)
@@ -7,5 +8,5 @@ const query = parserQuery`
 `
 
 export function queryGlobals(node: Parser.SyntaxNode) {
-    return query.captures(node).map(a => ({ text: a.node.text, type: a.name }));
+    return query().captures(node).map(a => ({ text: a.node.text, type: a.name, range: asLspRange(a.node) }));
 }

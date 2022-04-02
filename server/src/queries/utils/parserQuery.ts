@@ -1,6 +1,8 @@
-import * as Parser from 'tree-sitter';
-import * as FuncLanguage from 'tree-sitter-func-language';
+import * as Parser from 'web-tree-sitter';
+import { language } from '../../parser';
 
 export function parserQuery(text: TemplateStringsArray) {
-    return new Parser.Query(FuncLanguage, text.toString());
+    return () => {
+        return language.query(text.toString())
+    }
 }

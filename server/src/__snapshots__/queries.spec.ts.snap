@@ -3,10 +3,30 @@
 exports[`should query globals 1`] = `
 Array [
   Object {
+    "range": Object {
+      "end": Object {
+        "character": 21,
+        "line": 1,
+      },
+      "start": Object {
+        "character": 19,
+        "line": 1,
+      },
+    },
     "text": "id",
     "type": "globalVar",
   },
   Object {
+    "range": Object {
+      "end": Object {
+        "character": 15,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 11,
+        "line": 3,
+      },
+    },
     "text": "test",
     "type": "function",
   },
