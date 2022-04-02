@@ -15,12 +15,10 @@ import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 import { connection } from './connection';
-import { FuncContext } from './funcContext';
 
 
 // Create a simple text document manager.
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
-let funcContext: FuncContext;
 
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
@@ -57,9 +55,18 @@ connection.onInitialize((params: InitializeParams) => {
 		};
 	}
 
+	connection.onNotification('queue/remove', uri => { 
+		console.log('remove')
+	 });
+	connection.onNotification('queue/add', uri => {
+		console.log('add')
+	});
+	connection.onRequest('queue/init', uris => {
+		console.log('queue/init', uris)
+	});
+
 	for (let ws of params.workspaceFolders) {
 		connection.console.log(ws.uri)
-		funcContext = new FuncContext(ws.uri)
 	}
 	
 	return result;
@@ -76,7 +83,6 @@ connection.onInitialized(() => {
 			connection.console.log('Workspace folder change event received.');
 		});
 	}
-	funcContext.analyzeRoot();
 });
 
 interface ExtensionSettings {
@@ -87,7 +93,6 @@ interface ExtensionSettings {
 const documentSettings: Map<string, Thenable<ExtensionSettings>> = new Map();
 
 connection.onDidChangeConfiguration(change => {
-	funcContext.analyzeRoot();
 });
 
 function getDocumentSettings(resource: string): Thenable<ExtensionSettings> {
@@ -107,7 +112,6 @@ documents.onDidClose(e => {
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-	funcContext.analyze(change.document.uri)
 });
 
 connection.onDidChangeWatchedFiles(_change => {

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should query globals 1`] = `
+Array [
+  Object {
+    "text": "id",
+    "type": "globalVar",
+  },
+  Object {
+    "text": "test",
+    "type": "function",
+  },
+]
+`;
