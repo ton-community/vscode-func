@@ -132,13 +132,12 @@ export class SymbolIndex {
 
 	async update(): Promise<void> {
 		await this._currentUpdate;
-		this._currentUpdate = this._doUpdate(this._syncQueue.consume());
+		this._currentUpdate = this._doUpdate(this._syncQueue.consume()).catch(e => console.error(e));
 		return this._currentUpdate;
 	}
 
 	private async _doUpdate(uris: string[], silent?: boolean): Promise<void> {
 		if (uris.length !== 0) {
-
 			// schedule a new task to update the cache for changed uris
             let startedAt = Date.now();
 			const tasks = uris.map(this._createIndexTask, this);
@@ -227,7 +226,6 @@ export class SymbolIndex {
 		await this.update();
 
 		const result: lsp.SymbolInformation[] = [];
-		let sameLanguageOffset = 0;
 
 		const all = this.index.get(ident) ?? [];
 		const work: Promise<any>[] = [];
@@ -240,17 +238,11 @@ export class SymbolIndex {
 			}
 
 			work.push(this._documents.retrieve(uri).then(document => {
-				const isSameLanguage = source.languageId === document.languageId;
 				const symbols = getDocumentSymbols(document, this._trees);
 				for (const item of symbols) {
 					if (item.name === ident) {
 						const info = lsp.SymbolInformation.create(item.name, item.kind, item.selectionRange, uri);
-						if (isSameLanguage) {
-							result.unshift(info);
-							sameLanguageOffset++;
-						} else {
-							result.push(info);
-						}
+						result.unshift(info);
 					}
 				}
 
@@ -266,10 +258,7 @@ export class SymbolIndex {
 		}
 
 		await Promise.allSettled(work);
-
-		// only return results that are of the same language unless there are only 
-		// results from other languages
-		return result.slice(0, sameLanguageOffset || undefined);
+		return result;
 	}
 
 	async getUsages(ident: string, source: TextDocument) {
@@ -280,7 +269,6 @@ export class SymbolIndex {
 
 		const all = this.index.get(ident) ?? [];
 		const work: Promise<any>[] = [];
-		let sameLanguageOffset = 0;
 
 		for (const [uri, value] of all) {
 
@@ -290,17 +278,11 @@ export class SymbolIndex {
 			}
 
 			work.push(this._documents.retrieve(uri).then(document => {
-				const isSameLanguage = source.languageId === document.languageId;
 				const usages = getDocumentUsages(document, this._trees);
 				for (const item of usages) {
 					if (item.name === ident) {
 						const location = lsp.Location.create(uri, item.range);
-						if (isSameLanguage) {
-							result.unshift(location);
-							sameLanguageOffset++;
-						} else {
-							result.push(location);
-						}
+                        result.unshift(location);
 					}
 				}
 
@@ -316,9 +298,6 @@ export class SymbolIndex {
 		}
 
 		await Promise.allSettled(work);
-
-		// only return results that are of the same language unless there are only 
-		// results from other languages
-		return result.slice(0, sameLanguageOffset || undefined);
+		return result;
 	}
 }

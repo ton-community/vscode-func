@@ -1,9 +1,10 @@
 import { LRUMap } from './utils/lruMap';
+import * as lsp from 'vscode-languageserver';
 import * as Parser from 'web-tree-sitter';
 import { Disposable, Position } from 'vscode-languageserver';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { DocumentStore, TextDocumentChange2 } from './documentStore';
-import { language } from './parser';
+import { createParser } from './parser';
 
 class Entry {
 	constructor(
@@ -13,22 +14,28 @@ class Entry {
 	) { }
 }
 
+export type ParseDone = {
+    tree: Parser.Tree,
+    document: TextDocument
+}
+
 export class Trees {
 
 	private readonly _cache = new LRUMap<string, Entry>({
 		size: 100,
 		dispose(entries) {
 			for (let [, value] of entries) {
-				delete value.tree;
+				value.tree.delete();
 			}
 		}
 	});
 
 	private readonly _listener: Disposable[] = [];
-	private readonly _parser = new Parser();
+    private readonly _parser = createParser();
+    private readonly _onParseDone = new lsp.Emitter<ParseDone>();
+	readonly onParseDone = this._onParseDone.event;
 
 	constructor(private readonly _documents: DocumentStore) {
-
 		// build edits when document changes
 		this._listener.push(_documents.onDidChangeContent2(e => {
 			const info = this._cache.get(e.document.uri);
@@ -40,7 +47,7 @@ export class Trees {
 
 	dispose(): void {
 		for (let item of this._cache.values()) {
-			delete item.tree;
+			item.tree.delete();
 		}
 		for (let item of this._listener) {
 			item.dispose();
@@ -65,8 +72,6 @@ export class Trees {
 			return info.tree;
 		}
 
-		this._parser.setLanguage(language);
-
 		try {
 			const version = documentOrUri.version;
 			const text = documentOrUri.getText();
@@ -86,7 +91,13 @@ export class Trees {
 
 				info.tree = this._parser.parse(text, oldTree);
 				info.version = version;
+                oldTree.delete();
 			}
+
+            this._onParseDone.fire({
+                document: documentOrUri,
+                tree: info.tree
+            })
 
 			return info.tree;
 

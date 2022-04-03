@@ -8,7 +8,6 @@ export class DocumentSymbols {
 	constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees) { }
 
 	register(connection: lsp.Connection) {
-        console.log('register')
 		connection.client.register(lsp.DocumentSymbolRequest.type);
 		connection.onRequest(lsp.DocumentSymbolRequest.type, this.provideDocumentSymbols.bind(this));
 	}

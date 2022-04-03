@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as os from 'os';
 import * as Parser from 'web-tree-sitter';
 import { existsSync } from 'fs';
 
@@ -26,5 +25,6 @@ export const initParser = async (uri: string) => {
 export const createParser = () => {
     const parser = new Parser();
     parser.setLanguage(language);
+    parser.setTimeoutMicros(1000 * 1000);
     return parser
 }

@@ -76,8 +76,9 @@ export class DocumentStore extends TextDocuments<TextDocument> {
 	}
 
 	private async _requestDocument(uri: string): Promise<TextDocument> {
-		const reply = await this._connection.sendRequest<Uint8Array>('file/read', uri);
-		return TextDocument.create(uri, 'func', 1, this._decoder.decode(reply));
+		const reply = await this._connection.sendRequest<{ type: string, data: any }>('file/read', uri);
+        let decoded = this._decoder.decode(new Uint8Array(reply.data));
+		return TextDocument.create(uri, 'func', 1, decoded);
 	}
 
 }

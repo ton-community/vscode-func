@@ -79,12 +79,11 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		...Object.keys(vscode.workspace.getConfiguration('files', null).get('exclude') ?? {})
 	].join(',')}}`;
 
-	let size: number = Math.max(0, vscode.workspace.getConfiguration('anycode').get<number>('symbolIndexSize', 500));
+	let size: number = Math.max(0, vscode.workspace.getConfiguration('func').get<number>('symbolIndexSize', 500));
 
 	const init = async () => {
         let all = await vscode.workspace.findFiles(langPattern, exclude);
 
-        await new Promise((resolve) => setTimeout(resolve, 20000));
 		const uris = all.slice(0, size);
 		console.info(`USING ${uris.length} of ${all.length} files for ${langPattern}`);
 
