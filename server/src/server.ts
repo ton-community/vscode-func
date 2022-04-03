@@ -24,7 +24,7 @@ connection.onInitialize(async (params: InitializeParams) => {
 	const symbolIndex = new SymbolIndex(trees, documents);
 	features.push(new DocumentSymbols(documents, trees));
 	features.push(new DiagnosticsProvider(trees, documents));
-	features.push(new CompletionItemProvider());
+	features.push(new CompletionItemProvider(documents, trees, symbolIndex));
 
 	// manage symbol index. add/remove files as they are disovered and edited
 	documents.all().forEach(doc => symbolIndex.addFile(doc.uri));

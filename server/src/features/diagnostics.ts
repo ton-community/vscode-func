@@ -22,7 +22,6 @@ export class DiagnosticsProvider {
 
         const visitTree = (node: Parser.SyntaxNode) => {
             if (node.isMissing()) {
-                console.log(node.type);
                 diagnostics.push({
                     message: 'Missing ' + node.type,
                     range: asLspRange(node),
