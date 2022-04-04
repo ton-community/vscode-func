@@ -3,6 +3,8 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 import { DocumentStore } from '../documentStore';
 import { Trees } from '../trees';
 import { queryGlobals } from '../queries/globals';
+import * as Parser from 'web-tree-sitter';
+import { asLspRange } from '../utils/asLspRange';
 
 export class DocumentSymbols {
 	constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees) { }
@@ -28,13 +30,34 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): lsp.Do
 
     const result: lsp.DocumentSymbol[] = [];
     for (let declaration of globals) {
+        let children: lsp.DocumentSymbol[] = []
+        if (declaration.type == 'function') {
+            let body = declaration.node.parent.childForFieldName('body');
+            if (body) {
+                let declarations = body.descendantsOfType('variable_declaration')
+                for (let node of declarations) {
+                    let identifiers = node.descendantsOfType('identifier');
+                    children.push(...identifiers.map(localVar => {
+                        let range = asLspRange(localVar)
+                        return lsp.DocumentSymbol.create(
+                            localVar.text, 
+                            '', 
+                            lsp.SymbolKind.Variable, 
+                            range,
+                            range,
+                        )
+                    }))
+                }
+            }
+        }
         result.push(
             lsp.DocumentSymbol.create(
                 declaration.text, 
                 '', 
                 declaration.type === 'globalVar' ? lsp.SymbolKind.Variable : lsp.SymbolKind.Function, 
                 declaration.range, 
-                declaration.range
+                declaration.range,
+                children
             )
         );
     }

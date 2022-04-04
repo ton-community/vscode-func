@@ -8,5 +8,10 @@ const query = parserQuery`
 `
 
 export function queryGlobals(node: Parser.SyntaxNode) {
-    return query().captures(node).map(a => ({ text: a.node.text, type: a.name, range: asLspRange(a.node) }));
+    return query().captures(node).map(a => ({ 
+        text: a.node.text, 
+        type: a.name,
+        range: asLspRange(a.node),
+        node: a.node
+    }));
 }
