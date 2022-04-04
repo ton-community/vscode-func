@@ -3,9 +3,19 @@
 This extension enables support for FunC in VS Code.
 
 ## Features
+### Syntax highlighting
 
-- Syntax highlight
-- stdlib code snippets
+<img width="684" src="https://user-images.githubusercontent.com/16834309/161601626-4910b474-f1d7-4eba-9702-92529832ea99.png">
+
+### Symbols search
+Press *Cmd+Shift+O* to locate through symbols in file
+
+<img width="646" src="https://user-images.githubusercontent.com/16834309/161601370-4257c271-c8ff-463a-8265-75d73118a9ae.png">
+
+### Completion
+Get contextual completion hints while typing. Extension shows functions defined in workspace, global and local variables. 
+
+<img width="547" src="https://user-images.githubusercontent.com/16834309/161602498-71e1f894-8f06-4eaa-bc60-d9bcab098c56.png">
 
 ## Building & running
 
@@ -15,5 +25,14 @@ This extension enables support for FunC in VS Code.
 
 ## Release Notes
 
-No releases now. Stay tuned.
+#### **0.1.0**  
+Added symbols search & completion.
 
+#### **0.0.3**
+Some minor improvements.
+
+#### **0.0.2**
+Small highlighting fixes.
+
+#### **0.0.1**
+Draft release, highlighting & basic code snippets.

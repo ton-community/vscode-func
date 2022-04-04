@@ -1,7 +1,7 @@
 {
 	"name": "func-vscode-server",
 	"description": "FunC VS Code server",
-	"version": "0.0.3",
+	"version": "0.1.0",
 	"engines": {
 		"node": "*"
 	},
