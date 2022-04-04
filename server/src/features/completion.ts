@@ -1,7 +1,9 @@
 import * as lsp from 'vscode-languageserver';
 import { InsertTextFormat } from 'vscode-languageserver';
+import * as Parser from 'web-tree-sitter';
 import { DocumentStore } from '../documentStore';
 import { Trees } from '../trees';
+import { locatePositionInTree } from '../utils/locatePositionInTree';
 import { SymbolIndex } from './symbolIndex';
 
 export class CompletionItemProvider {
@@ -20,6 +22,39 @@ export class CompletionItemProvider {
 		}
 
         let result: lsp.CompletionItem[] = [];
+
+        // local symbols
+        let cursorPosition = {
+            column: params.position.character,
+            row: params.position.line,
+        }
+        let descendant = tree.rootNode.descendantForPosition(cursorPosition);
+
+        // navigate through parents and find their variables declared higher than cursor
+        while (descendant) {
+            while (descendant && descendant.type !== 'block_statement') {
+                descendant = descendant.parent;
+            }
+            if (!descendant) {
+                continue;
+            }
+            for (let child of descendant.children) {
+                if (child.type == 'expression_statement') {
+                    let variableDeclarations = child.descendantsOfType('variable_declaration', null, cursorPosition);
+                    for (let varDec of variableDeclarations) {
+                        let identifiers = varDec.descendantsOfType('identifier', null, cursorPosition);
+                        result.push(...identifiers.map(a => {
+                            let item = lsp.CompletionItem.create(a.text);
+                            item.kind = lsp.CompletionItemKind.Variable;
+                            return item;
+                        }))
+                    }
+                }
+            }
+            descendant = descendant.parent;
+        }
+
+        // global symbols
         let symbols = new Set<string>();
         for (let [label, occurencies] of this._symbols.index.query('')) {
             for (let [doc, symbol] of occurencies.entries()) {
