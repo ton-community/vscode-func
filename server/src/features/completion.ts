@@ -1,9 +1,6 @@
 import * as lsp from 'vscode-languageserver';
-import { InsertTextFormat } from 'vscode-languageserver';
-import * as Parser from 'web-tree-sitter';
 import { DocumentStore } from '../documentStore';
 import { Trees } from '../trees';
-import { locatePositionInTree } from '../utils/locatePositionInTree';
 import { SymbolIndex } from './symbolIndex';
 
 export class CompletionItemProvider {
