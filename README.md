@@ -8,7 +8,7 @@ This extension enables support for FunC in VS Code.
 <img width="684" src="https://user-images.githubusercontent.com/16834309/161601626-4910b474-f1d7-4eba-9702-92529832ea99.png">
 
 ### Symbols search
-Press *Cmd+Shift+O* to locate through symbols in file
+Press *Cmd+Shift+O* to locate through symbols in file.
 
 <img width="646" src="https://user-images.githubusercontent.com/16834309/161601370-4257c271-c8ff-463a-8265-75d73118a9ae.png">
 
@@ -17,6 +17,9 @@ Get contextual completion hints while typing. Extension shows functions defined 
 
 <img width="547" src="https://user-images.githubusercontent.com/16834309/161602498-71e1f894-8f06-4eaa-bc60-d9bcab098c56.png">
 
+### Definitions
+View definitions for function or global variable using *Cmd+Click*.
+
 ## Building & running
 
 1. install deps using `yarn install`
@@ -24,6 +27,9 @@ Get contextual completion hints while typing. Extension shows functions defined 
 3. use debug menu in VS Code to test extension
 
 ## Release Notes
+
+#### **0.2.0**
+Fixed bugs related with paths in Windows, fixed completion after "." and "~", added definitions.
 
 #### **0.1.0**  
 Added symbols search & completion.
