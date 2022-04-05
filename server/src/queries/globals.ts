@@ -1,6 +1,6 @@
 import { parserQuery } from './utils/parserQuery';
 import * as Parser from 'web-tree-sitter';
-import { asLspRange } from '../utils/asLspRange';
+import { asLspRange } from '../utils/position';
 
 const query = parserQuery`
 (function_definition name: (function_name) @function)

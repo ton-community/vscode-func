@@ -6,6 +6,7 @@ import {
 import { connection } from './connection';
 import { DocumentStore } from './documentStore';
 import { CompletionItemProvider } from './features/completion';
+import { DefinitionProvider } from './features/definitions';
 import { DiagnosticsProvider } from './features/diagnostics';
 import { DocumentSymbols } from './features/documentSymbols';
 import { SymbolIndex } from './features/symbolIndex';
@@ -25,6 +26,7 @@ connection.onInitialize(async (params: InitializeParams) => {
 	features.push(new DocumentSymbols(documents, trees));
 	features.push(new DiagnosticsProvider(trees, documents));
 	features.push(new CompletionItemProvider(documents, trees, symbolIndex));
+	features.push(new DefinitionProvider(documents, trees, symbolIndex));
 
 	// manage symbol index. add/remove files as they are disovered and edited
 	documents.all().forEach(doc => symbolIndex.addFile(doc.uri));

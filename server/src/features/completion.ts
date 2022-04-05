@@ -1,6 +1,8 @@
 import * as lsp from 'vscode-languageserver';
 import { DocumentStore } from '../documentStore';
+import { findLocals } from '../queries/locals';
 import { Trees } from '../trees';
+import { asParserPoint } from '../utils/position';
 import { SymbolIndex } from './symbolIndex';
 
 export class CompletionItemProvider {
@@ -30,35 +32,12 @@ export class CompletionItemProvider {
 
         // local symbols
         if (!onlyFunctions) {
-            let cursorPosition = {
-                column: params.position.character,
-                row: params.position.line,
-            }
-            let descendant = tree.rootNode.descendantForPosition(cursorPosition);
-    
-            // navigate through parents and find their variables declared higher than cursor
-            while (descendant) {
-                while (descendant && descendant.type !== 'block_statement') {
-                    descendant = descendant.parent;
-                }
-                if (!descendant) {
-                    continue;
-                }
-                for (let child of descendant.children) {
-                    if (child.type == 'expression_statement') {
-                        let variableDeclarations = child.descendantsOfType('variable_declaration', null, cursorPosition);
-                        for (let varDec of variableDeclarations) {
-                            let identifiers = varDec.descendantsOfType('identifier', null, cursorPosition);
-                            result.push(...identifiers.map(a => {
-                                let item = lsp.CompletionItem.create(a.text);
-                                item.kind = lsp.CompletionItemKind.Variable;
-                                return item;
-                            }))
-                        }
-                    }
-                }
-                descendant = descendant.parent;
-            }
+            let cursorPosition = asParserPoint(params.position);
+            result.push(...findLocals(tree.rootNode, cursorPosition).map(a => {
+                let item = lsp.CompletionItem.create(a.text);
+                item.kind = lsp.CompletionItemKind.Variable;
+                return item;
+            }))
         }
 
         // global symbols

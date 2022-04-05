@@ -4,7 +4,7 @@ import { Trees } from '../trees';
 import { connection } from '../connection';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import * as Parser from 'web-tree-sitter';
-import { asLspRange } from '../utils/asLspRange';
+import { asLspRange } from '../utils/position';
 
 export class DiagnosticsProvider {
     constructor(private readonly _trees: Trees, private readonly _documents: DocumentStore) {

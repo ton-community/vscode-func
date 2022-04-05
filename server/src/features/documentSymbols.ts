@@ -3,8 +3,7 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 import { DocumentStore } from '../documentStore';
 import { Trees } from '../trees';
 import { queryGlobals } from '../queries/globals';
-import * as Parser from 'web-tree-sitter';
-import { asLspRange } from '../utils/asLspRange';
+import { asLspRange } from '../utils/position';
 
 export class DocumentSymbols {
 	constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees) { }
@@ -49,17 +48,28 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): lsp.Do
                     }))
                 }
             }
+            result.push(
+                lsp.DocumentSymbol.create(
+                    declaration.text, 
+                    '', 
+                    lsp.SymbolKind.Function, 
+                    asLspRange(declaration.node.parent),
+                    declaration.range, 
+                    children
+                )
+            );
+        } else if (declaration.type == 'globalVar') {
+            result.push(
+                lsp.DocumentSymbol.create(
+                    declaration.text, 
+                    '', 
+                    lsp.SymbolKind.Variable, 
+                    declaration.range, 
+                    declaration.range,
+                    children
+                )
+            );
         }
-        result.push(
-            lsp.DocumentSymbol.create(
-                declaration.text, 
-                '', 
-                declaration.type === 'globalVar' ? lsp.SymbolKind.Variable : lsp.SymbolKind.Function, 
-                declaration.range, 
-                declaration.range,
-                children
-            )
-        );
     }
     return result;
 }
