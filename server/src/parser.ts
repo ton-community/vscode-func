@@ -5,20 +5,17 @@ import { existsSync } from 'fs';
 
 export let language: Parser.Language
 
-export const initParser = async (uri: string) => {
+export const initParser = async (treeSitterUri: string, langUri: string) => {
     if (language) {
         return;
     }
-    if (!existsSync(uri)) {
-        uri = uri.slice('file://'.length)
-    }
     const options: object | undefined = {
 		locateFile() {
-			return uri
+			return treeSitterUri
 		}
 	};
     await Parser.init(options)
-    language = await Parser.Language.load(path.resolve(__dirname + '/../tree-sitter-func.wasm'))
+    language = await Parser.Language.load(langUri)
 
 }
 

@@ -16,7 +16,7 @@ import { Trees } from './trees';
 const features: { register(connection: Connection): any }[] = [];
 
 connection.onInitialize(async (params: InitializeParams) => {
-	await initParser(params.initializationOptions.treeSitterWasmUri);
+	await initParser(params.initializationOptions.treeSitterWasmUri, params.initializationOptions.langUri);
 
 	const documents = new DocumentStore(connection);
 	const trees = new Trees(documents);
