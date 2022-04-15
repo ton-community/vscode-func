@@ -28,6 +28,9 @@ View definitions for function or global variable using *Cmd+Click*.
 
 ## Release Notes
 
+#### **0.2.1**
+Added snippets for recv_external, recv_internal, supported_interfaces.
+
 #### **0.2.0**
 Fixed bugs related with paths in Windows, fixed completion after "." and "~", added definitions.
 

@@ -3,7 +3,7 @@
     "displayName": "FunC Language Support",
     "description": "This extension enables support for FunC in VS Code.",
     "icon": "logo.png",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "engines": {
         "vscode": "^1.63.0"
     },
@@ -26,11 +26,11 @@
     "publisher": "tonwhales",
     "scripts": {
         "vscode:prepublish": "npm run compile",
-		"compile": "tsc -b",
-		"watch": "tsc -b -w",
-		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
-		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-		"test": "sh ./scripts/e2e.sh"
+        "compile": "tsc -b",
+        "watch": "tsc -b -w",
+        "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
+        "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+        "test": "sh ./scripts/e2e.sh"
     },
     "main": "./client/out/extension",
     "contributes": {
@@ -57,8 +57,8 @@
         ],
         "snippets": [
             {
-              "language": "func",
-              "path": "./snippets/snippets.json"
+                "language": "func",
+                "path": "./snippets/snippets.json"
             }
         ]
     },
