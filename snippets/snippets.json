@@ -1,0 +1,17 @@
+{
+    "Recieve internal message": {
+      "prefix": ["recv_internal", "main"],
+      "body": ["() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {", "\t$0", "}"],
+      "description": "A template for receiving internal message."
+    },
+    "Recieve external message": {
+        "prefix": ["recv_external"],
+        "body": ["() recv_external(slice in_msg) impure {", "\t$0", "}"],
+        "description": "A template for receiving external message."
+    },
+    "Supported interfaces": {
+        "prefix": ["supported_interfaces"],
+        "body": ["_ supported_interfaces() method_id {", "\t;; see https://github.com/ton-foundation/specs/blob/main/specs/wtf-0001.md", "\treturn (123515602279859691144772641439386770278);", "}"],
+        "description": "A template for WTF-01 compatible introspection. (ref: https://github.com/ton-foundation/specs/blob/main/specs/wtf-0001.md)"
+    }
+  }
