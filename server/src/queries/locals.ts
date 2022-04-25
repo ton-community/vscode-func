@@ -8,6 +8,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
         kind: 'variable',
         text: string
     }[] = [];
+
     // navigate through parents and find their variables declared higher than cursor
     while (descendant) {
         while (descendant && descendant.type !== 'block_statement') {
@@ -29,7 +30,21 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
                 }
             }
         }
+
         descendant = descendant.parent;
+        if (descendant && descendant.type === 'function_definition') {
+            let parameters = descendant.childForFieldName('agruments').descendantsOfType('parameter_declaration');
+            for (let param of parameters) {
+                let node = param.childForFieldName('name');
+                if (!node) continue;
+                
+                result.push({
+                    node: node,
+                    kind: 'variable' as 'variable', // Typescript wtf???
+                    text: node.text,
+                });
+            }
+        }
     }
     return result;
 }
