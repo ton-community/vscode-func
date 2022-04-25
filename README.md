@@ -28,6 +28,9 @@ View definitions for function or global variable using *Cmd+Click*.
 
 ## Release Notes
 
+#### **0.2.2**
+Fixed autocomplete with function arguments, minor highlighting bugs.
+
 #### **0.2.1**
 Added snippets for recv_external, recv_internal, supported_interfaces.
 
