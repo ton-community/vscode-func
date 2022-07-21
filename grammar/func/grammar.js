@@ -1,4 +1,4 @@
-const {commaSep, commaSep1, commaSep2} = require('./grammar/utils.js')
+const { commaSep1 } = require('./grammar/utils.js')
 const types = require('./grammar/types.js')
 const expressions = require('./grammar/expressions.js')
 const functions = require('./grammar/functions.js')
@@ -24,12 +24,14 @@ module.exports = grammar({
     ),
 
     compiler_directive: $ => seq(choice($.include_directive, $.pragma_directive), ';'),
-    include_directive: $ => seq('#include', field('path', $.string_literal)),
+    include_directive: $ => seq('#include', repeat1(' '), field('path', $.string_literal)),
 
     version_identifier: $ => /(>=|<=|=|>|<|\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?/,
     pragma_directive: $ => seq(
       '#pragma',
+      repeat1(' '),
       field('key', choice('version', 'not-version')), 
+      repeat1(' '),
       field('value', $.version_identifier)
     ),
 

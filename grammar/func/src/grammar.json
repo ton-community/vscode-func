@@ -56,6 +56,13 @@
           "value": "#include"
         },
         {
+          "type": "REPEAT1",
+          "content": {
+            "type": "STRING",
+            "value": " "
+          }
+        },
+        {
           "type": "FIELD",
           "name": "path",
           "content": {
@@ -77,6 +84,13 @@
           "value": "#pragma"
         },
         {
+          "type": "REPEAT1",
+          "content": {
+            "type": "STRING",
+            "value": " "
+          }
+        },
+        {
           "type": "FIELD",
           "name": "key",
           "content": {
@@ -91,6 +105,13 @@
                 "value": "not-version"
               }
             ]
+          }
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "STRING",
+            "value": " "
           }
         },
         {
