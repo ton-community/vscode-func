@@ -19,6 +19,87 @@
         {
           "type": "SYMBOL",
           "name": "global_var_declarations"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "compiler_directive"
+        }
+      ]
+    },
+    "compiler_directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "include_directive"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "pragma_directive"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "include_directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#include"
+        },
+        {
+          "type": "FIELD",
+          "name": "path",
+          "content": {
+            "type": "SYMBOL",
+            "name": "string_literal"
+          }
+        }
+      ]
+    },
+    "version_identifier": {
+      "type": "PATTERN",
+      "value": "(>=|<=|=|>|<|\\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?"
+    },
+    "pragma_directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#pragma"
+        },
+        {
+          "type": "FIELD",
+          "name": "key",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "version"
+              },
+              {
+                "type": "STRING",
+                "value": "not-version"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "version_identifier"
+          }
         }
       ]
     },
@@ -1889,50 +1970,67 @@
       ]
     },
     "number_literal": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "CHOICE",
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "SEQ",
             "members": [
               {
-                "type": "STRING",
-                "value": "-"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SEQ",
+                "type": "CHOICE",
                 "members": [
                   {
                     "type": "STRING",
-                    "value": "0x"
+                    "value": "-"
                   },
                   {
-                    "type": "PATTERN",
-                    "value": "[0-9a-fA-F]+"
+                    "type": "BLANK"
                   }
                 ]
               },
               {
-                "type": "PATTERN",
-                "value": "[0-9]+"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "0x"
+                      },
+                      {
+                        "type": "PATTERN",
+                        "value": "[0-9a-fA-F]+"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "[0-9]+"
+                  }
+                ]
               }
             ]
           }
-        ]
-      }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number_string_literal"
+        }
+      ]
     },
     "string_literal": {
       "type": "PATTERN",
       "value": "\"[^\"]*\""
+    },
+    "number_string_literal": {
+      "type": "PATTERN",
+      "value": "\"[^\"]*\"(H|h|c|u)"
+    },
+    "slice_string_literal": {
+      "type": "PATTERN",
+      "value": "\"[^\"]*\"(s|a)"
     },
     "identifier": {
       "type": "PATTERN",

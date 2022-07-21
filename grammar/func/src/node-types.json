@@ -96,6 +96,25 @@
     }
   },
   {
+    "type": "compiler_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "include_directive",
+          "named": true
+        },
+        {
+          "type": "pragma_directive",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "do_statement",
     "named": true,
     "fields": {
@@ -1204,6 +1223,22 @@
     }
   },
   {
+    "type": "include_directive",
+    "named": true,
+    "fields": {
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "inline",
     "named": true,
     "fields": {}
@@ -1280,6 +1315,21 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "number_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "number_string_literal",
           "named": true
         }
       ]
@@ -1444,6 +1494,36 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "pragma_directive",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "not-version",
+            "named": false
+          },
+          {
+            "type": "version",
+            "named": false
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "version_identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1881,6 +1961,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "compiler_directive",
+          "named": true
+        },
         {
           "type": "function_definition",
           "named": true
@@ -2369,6 +2453,14 @@
     "named": false
   },
   {
+    "type": "#include",
+    "named": false
+  },
+  {
+    "type": "#pragma",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -2621,7 +2713,11 @@
     "named": false
   },
   {
-    "type": "number_literal",
+    "type": "not-version",
+    "named": false
+  },
+  {
+    "type": "number_string_literal",
     "named": true
   },
   {
@@ -2658,6 +2754,14 @@
   },
   {
     "type": "var_type",
+    "named": true
+  },
+  {
+    "type": "version",
+    "named": false
+  },
+  {
+    "type": "version_identifier",
     "named": true
   },
   {

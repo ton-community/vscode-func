@@ -38,7 +38,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			fileEvents: workspace.createFileSystemWatcher('**/.fcrc')
 		},
 		initializationOptions: {
-			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './server/node_modules/web-tree-sitter/tree-sitter.wasm').fsPath,
+			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './node_modules/web-tree-sitter/tree-sitter.wasm').fsPath,
             langUri: vscode.Uri.joinPath(context.extensionUri,  './server/tree-sitter-func.wasm').fsPath,
 			databaseName
 		}

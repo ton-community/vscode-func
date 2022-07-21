@@ -19,7 +19,18 @@ module.exports = grammar({
 
     _top_level_item: $ => choice(
       $.function_definition,
-      $.global_var_declarations
+      $.global_var_declarations,
+      $.compiler_directive
+    ),
+
+    compiler_directive: $ => seq(choice($.include_directive, $.pragma_directive), ';'),
+    include_directive: $ => seq('#include', field('path', $.string_literal)),
+
+    version_identifier: $ => /(>=|<=|=|>|<|\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?/,
+    pragma_directive: $ => seq(
+      '#pragma',
+      field('key', choice('version', 'not-version')), 
+      field('value', $.version_identifier)
     ),
 
     global_var_declarations: $ => seq(
@@ -38,15 +49,20 @@ module.exports = grammar({
     ...functions,
     ...statements,
 
-    number_literal: $ => token(seq(
-          optional('-'),
-          choice(
-            seq('0x', /[0-9a-fA-F]+/),
-            /[0-9]+/
-          )
-        )),
+    number_literal: $ => choice(
+      token(seq(
+        optional('-'),
+        choice(
+          seq('0x', /[0-9a-fA-F]+/),
+          /[0-9]+/
+        )
+      )),
+      $.number_string_literal
+    ),
 
     string_literal: $ => /"[^"]*"/,
+    number_string_literal: $ => /"[^"]*"(H|h|c|u)/,
+    slice_string_literal: $ => /"[^"]*"(s|a)/,
 
     // actually FunC identifiers are much more flexible
     identifier: $ => /(`.*`)|([a-zA-Z_](\w|['?:])+)|([a-zA-Z])/,
