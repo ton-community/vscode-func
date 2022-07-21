@@ -11,6 +11,9 @@
 			"include": "#strings"
 		},
 		{
+			"include": "#directives"
+		},
+		{
 			"include": "#numeric"
 		},
 		{
@@ -39,10 +42,23 @@
 				"match": "\\b(false|true)\\b"
 			}]
 		},
+		"directives": {
+			"name": "storage.modifier.import",
+			"begin": "#include|#pragma",
+			"end": ";",
+			"patterns": [{
+				"begin": "\"",
+				"end": "\"",
+				"name": "string.quoted.double"
+			}, {
+				"match": "(>=|<=|=|>|<|\\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?",
+				"name": "constant.numeric"
+			}]
+		},
 		"strings": {
 			"name": "string.quoted.double.",
 			"begin": "\"",
-			"end": "\""
+			"end": "\"(H|h|c|u|s|a)?"
 		},
 		"numeric": {
 			"name": "constant.numeric",
