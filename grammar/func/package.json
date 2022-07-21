@@ -1,0 +1,31 @@
+{
+  "name": "tree-sitter-func-language",
+  "version": "0.1.2",
+  "description": "FunC grammar for node-tree-sitter",
+  "repository": "github:akifoq/tree-sitter-func",
+  "main": "bindings/node",
+  "keywords": [
+    "parser",
+    "lexer"
+  ],
+  "author": "akifoq",
+  "license": "MIT",
+  "dependencies": {
+    "nan": "^2.15.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.19.5"
+  },
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "tree-sitter test"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.func",
+      "file-types": [
+        "fc"
+      ]
+    }
+  ]
+}
