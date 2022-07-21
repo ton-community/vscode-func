@@ -23,14 +23,18 @@
         "email": "danila@whalescorp.com",
         "url": "https://github.com/dvlkv"
     },
+    "workspaces": [
+        "grammar/func",
+        "server",
+        "client"
+    ],
     "publisher": "tonwhales",
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "yarn compile",
         "compile": "tsc -b",
+        "grammar:compile": "yarn workspace func-language build && cp grammar/func/tree-sitter-func.wasm server/tree-sitter-func.wasm",
         "watch": "tsc -b -w",
-        "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
-        "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-        "test": "sh ./scripts/e2e.sh"
+        "lint": "eslint ./client/src ./server/src --ext .ts,.tsx"
     },
     "main": "./client/out/extension",
     "contributes": {
@@ -63,7 +67,9 @@
         ]
     },
     "devDependencies": {
-        "typescript": "^4.6.3",
         "vscode": "^1.1.37"
+    },
+    "dependencies": {
+        "tree-sitter-cli": "^0.20.6"
     }
 }

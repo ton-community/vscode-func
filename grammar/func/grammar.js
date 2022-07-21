@@ -39,12 +39,12 @@ module.exports = grammar({
     ...statements,
 
     number_literal: $ => token(seq(
-      optional('-'),
-      choice(
-        seq('0x', /[0-9a-fA-F]+/),
-        /[0-9]+/
-      )
-    )),
+          optional('-'),
+          choice(
+            seq('0x', /[0-9a-fA-F]+/),
+            /[0-9]+/
+          )
+        )),
 
     string_literal: $ => /"[^"]*"/,
 

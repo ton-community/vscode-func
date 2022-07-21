@@ -1,13 +1,7 @@
 {
-	"name": "func-vscode",
-	"description": "VSCode part of a language server",
-	"license": "MIT",
-	"version": "0.2.0",
-	"publisher": "vscode",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/tonwhales/vscode-func"
-	},
+	"name": "client",
+	"description": "VSCode client part of the extension",
+	"private": true,
 	"engines": {
 		"vscode": "^1.63.0"
 	},

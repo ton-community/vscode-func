@@ -1,23 +1,16 @@
 {
-	"name": "func-vscode-server",
+	"name": "server",
 	"description": "FunC VS Code server",
-	"version": "0.2.0",
+	"private": true,
 	"engines": {
 		"node": "*"
 	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/tonwhales/vscode-func"
-	},
 	"dependencies": {
-		"chevrotain": "^10.1.2",
 		"jest": "^27.5.1",
-		"tree-sitter-func-language": "^0.2.0",
 		"vscode-languageserver": "^7.0.0",
 		"vscode-languageserver-textdocument": "^1.0.4",
 		"web-tree-sitter": "^0.20.5"
 	},
-	"scripts": {},
 	"devDependencies": {
 		"@types/jest": "^27.4.1",
 		"@types/node": "^17.0.23",
