@@ -9,6 +9,7 @@ import { CompletionItemProvider } from './features/completion';
 import { DefinitionProvider } from './features/definitions';
 import { DiagnosticsProvider } from './features/diagnostics';
 import { DocumentSymbols } from './features/documentSymbols';
+import { FormattingProvider } from './features/formatting';
 import { SymbolIndex } from './features/symbolIndex';
 import { initParser } from './parser';
 import { Trees } from './trees';
@@ -27,6 +28,7 @@ connection.onInitialize(async (params: InitializeParams) => {
 	features.push(new DiagnosticsProvider(trees, documents));
 	features.push(new CompletionItemProvider(documents, trees, symbolIndex));
 	features.push(new DefinitionProvider(documents, trees, symbolIndex));
+	features.push(new FormattingProvider(documents, trees));
 
 	// manage symbol index. add/remove files as they are disovered and edited
 	documents.all().forEach(doc => symbolIndex.addFile(doc.uri));
