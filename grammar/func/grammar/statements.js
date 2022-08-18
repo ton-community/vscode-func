@@ -12,18 +12,18 @@ module.exports = {
     $.while_statement,
   ),
 
-  return_statement: $ => seq('return', $._expression, ';'),
+  return_statement: $ => seq('return', $.expression, ';'),
   block_statement: $ => seq('{', repeat($._statement), '}'),
-  expression_statement: $ => seq($._expression, ';'),
+  expression_statement: $ => seq($.expression, ';'),
   empty_statement: $ => ';',
-  repeat_statement: $ => seq('repeat', field("count", $._expression), field("body", $.block_statement)),
+  repeat_statement: $ => seq('repeat', field("count", $.expression), field("body", $.block_statement)),
 
   if_statement: $ => seq(
     choice('if', 'ifnot'),
     $._if_statement_contents
   ),
   _if_statement_contents: $ => seq(
-    field("condition", $._expression),
+    field("condition", $.expression),
     field("consequent", $.block_statement),
     field("alternative",
       optional(choice(
@@ -36,11 +36,11 @@ module.exports = {
     "do",
     field("body", $.block_statement),
     "until",
-    field("postcondition", $._expression)
+    field("postcondition", $.expression)
   ),
   while_statement: $ => seq(
     "while",
-    field("precondition", $._expression),
+    field("precondition", $.expression),
     field("body", $.block_statement)
   )
 }

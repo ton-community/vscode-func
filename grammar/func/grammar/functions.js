@@ -5,12 +5,8 @@ module.exports = {
     field("type_variables", optional($.type_variables_list)),
     field("return_type", $._type),
     field("name", $.function_name),
-    field("agruments", $.parameter_list),
-    field("specifiers", seq(
-      optional($.impure),
-      optional($.inline),
-      optional($.method_id)
-    )),
+    field("arguments", $.parameter_list),
+    field("specifiers", optional($.specifiers_list)),
     choice(
       ';',
       field("body", $.block_statement),
@@ -25,6 +21,12 @@ module.exports = {
   method_id: $ => seq("method_id", optional(
     seq('(', choice($.number_literal, $.string_literal), ')')
   )),
+
+  specifiers_list: $ => choice(
+    seq($.impure, optional($.inline), optional($.method_id)), 
+    seq($.inline, optional($.method_id)), 
+    $.method_id
+  ),
 
   type_variables_list: $ => seq(
     "forall",

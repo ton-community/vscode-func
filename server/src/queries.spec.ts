@@ -3,7 +3,7 @@ import { createParser, initParser } from './parser'
 import { queryGlobals } from './queries/globals';
 
 beforeAll(async () => {
-    await initParser(path.resolve(__dirname + '/../node_modules/web-tree-sitter/tree-sitter.wasm'), path.resolve(__dirname, '..', 'tree-sitter-func.wasm'));
+    await initParser(path.resolve(__dirname + '/../../node_modules/web-tree-sitter/tree-sitter.wasm'), path.resolve(__dirname, '..', 'tree-sitter-func.wasm'));
 })
 
 it('should query globals', () => {
@@ -21,4 +21,4 @@ it('should query globals', () => {
 
     let globals = queryGlobals(tree.rootNode);
     expect(globals).toMatchSnapshot();
-})
+});

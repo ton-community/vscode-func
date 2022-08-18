@@ -5,7 +5,7 @@ module.exports = {
   // original parser assigns some flags (_IsLvalue, _IsRvalue, _IsNewVar, _IsType, ...) to every non-terminal symbol match and sometimes checks their fitness
   // we mostly ignore this aspect, so we actually accept wider class of expression-like strings
   // and ofcourse we don't do typechecking (it's not grammar task to do so)
-  _expression: $ => $._expr10,
+  expression: $ => $._expr10,
 
   _expr10: $ => prec(10, seq(
     $._expr13,
@@ -20,7 +20,7 @@ module.exports = {
     $._expr15,
     optional(seq(
       '?',
-      $._expression,
+      $.expression,
       ':',
       $._expr13
     ))
@@ -128,7 +128,7 @@ module.exports = {
 
   unit_literal: $ => '()',
 
-  parenthesized_expression: $ => seq('(', $._expression, ')'),
-  tensor_expression: $ => seq('(', commaSep2($._expression), ')'),
-  tuple_expression: $ => seq('[', commaSep($._expression), ']'),
+  parenthesized_expression: $ => seq('(', $.expression, ')'),
+  tensor_expression: $ => seq('(', commaSep2($.expression), ')'),
+  tuple_expression: $ => seq('[', commaSep($.expression), ']'),
 }
