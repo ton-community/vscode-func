@@ -33,7 +33,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
 
         descendant = descendant.parent;
         if (descendant && descendant.type === 'function_definition') {
-            let parameters = descendant.childForFieldName('agruments').descendantsOfType('parameter_declaration');
+            let parameters = descendant.childForFieldName('agruments')?.descendantsOfType('parameter_declaration') || [];
             for (let param of parameters) {
                 let node = param.childForFieldName('name');
                 if (!node) continue;
