@@ -90,8 +90,9 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 
 		await client.sendRequest('queue/init', uris.map(String));
 	};
+	
 	const initCancel = new Promise<void>(resolve => disposables.push(new vscode.Disposable(resolve)));
-	vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: 'Building Index...' }, () => Promise.race([init(), initCancel]));
+	vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: '[FunC] Building Index...' }, () => Promise.race([init(), initCancel]));
 
 	disposables.push(watcher.onDidCreate(uri => {
 		client.sendNotification('queue/add', uri.toString());
