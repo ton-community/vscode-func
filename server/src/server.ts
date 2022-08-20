@@ -4,6 +4,7 @@ import {
 	Connection
 } from 'vscode-languageserver/node';
 import { connection } from './connection';
+import { DirectivesIndex } from './features/directivesIndex';
 import { DocumentStore } from './documentStore';
 import { CompletionItemProvider } from './features/completion';
 import { DefinitionProvider } from './features/definitions';
@@ -24,8 +25,10 @@ connection.onInitialize(async (params: InitializeParams) => {
 	const trees = new Trees(documents);
 	
 	const symbolIndex = new SymbolIndex(trees, documents);
+	const depsIndex = new DirectivesIndex(trees, documents);
+
 	features.push(new DocumentSymbols(documents, trees));
-	features.push(new DiagnosticsProvider(trees, documents));
+	features.push(new DiagnosticsProvider(trees, depsIndex));
 	features.push(new CompletionItemProvider(documents, trees, symbolIndex));
 	features.push(new DefinitionProvider(documents, trees, symbolIndex));
 	features.push(new FormattingProvider(documents, trees));

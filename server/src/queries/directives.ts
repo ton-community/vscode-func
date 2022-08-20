@@ -7,5 +7,19 @@ const query = parserQuery`
 `
 
 export function queryDirectives(node: Parser.SyntaxNode) {
-    return query().captures(node);
+    let captures = query().captures(node);
+    let includes = captures.filter(a => a.name === 'include');
+    let pramgas = captures.filter(a => a.name === 'pragma');
+
+    return {
+        includes: includes.map(a => ({
+            path: a.node.childForFieldName('path').text,
+            node: a.node,
+        })),
+        pramgas: pramgas.map(a => ({
+            key: a.node.childForFieldName('key').text,
+            value: a.node.childForFieldName('value').text,
+            node: a.node
+        }))
+    }
 }

@@ -169,7 +169,7 @@ export class SymbolIndex {
 			// update index
 			const _t1Index = performance.now();
 			try {
-				this._doIndex(document);
+				this._doIndex(document.document);
 			} catch (e) {
 				console.log(`FAILED to index ${uri}`, e);
 			}
@@ -238,7 +238,7 @@ export class SymbolIndex {
 			}
 
 			work.push(this._documents.retrieve(uri).then(document => {
-				const symbols = getDocumentSymbols(document, this._trees);
+				const symbols = getDocumentSymbols(document.document, this._trees);
 				for (const item of symbols) {
 					if (item.name === ident) {
 						const info = lsp.SymbolInformation.create(item.name, item.kind, item.selectionRange, uri);
@@ -248,8 +248,8 @@ export class SymbolIndex {
 
 				// update index
 				setTimeout(() => {
-					this._asyncQueue.dequeue(document.uri);
-					this._doIndex(document, symbols);
+					this._asyncQueue.dequeue(document.document.uri);
+					this._doIndex(document.document, symbols);
 				});
 
 			}).catch(err => {
@@ -278,7 +278,7 @@ export class SymbolIndex {
 			}
 
 			work.push(this._documents.retrieve(uri).then(document => {
-				const usages = getDocumentUsages(document, this._trees);
+				const usages = getDocumentUsages(document.document, this._trees);
 				for (const item of usages) {
 					if (item.name === ident) {
 						const location = lsp.Location.create(uri, item.range);
@@ -288,8 +288,8 @@ export class SymbolIndex {
 
 				// update index
 				setTimeout(() => {
-					this._asyncQueue.dequeue(document.uri);
-					this._doIndex(document, undefined, usages);
+					this._asyncQueue.dequeue(document.document.uri);
+					this._doIndex(document.document, undefined, usages);
 				});
 
 			}).catch(err => {

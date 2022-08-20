@@ -18,7 +18,7 @@ export class CompletionItemProvider {
 
     async provideCompletionItems(params: lsp.CompletionParams): Promise<lsp.CompletionItem[]> {
         const document = await this._documents.retrieve(params.textDocument.uri);
-		const tree = this._trees.getParseTree(document);
+		const tree = this._trees.getParseTree(document.document);
 		if (!tree) {
 			return [];
 		}

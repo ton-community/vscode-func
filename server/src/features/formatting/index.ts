@@ -25,7 +25,7 @@ export class FormattingProvider {
 			
 			if (node.type === '}' || node.type === ')') indent--;
 
-			edits.push(...formatNode(node, document, indent));
+			edits.push(...formatNode(node, document.document, indent));
 
 			if (node.type === '{' || node.type === '(') indent++;
 

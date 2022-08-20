@@ -15,7 +15,7 @@ export class DocumentSymbols {
 
 	async provideDocumentSymbols(params: lsp.DocumentSymbolParams): Promise<lsp.DocumentSymbol[]> {
 		const document = await this._documents.retrieve(params.textDocument.uri);
-		let symbols = getDocumentSymbols(document, this._trees);
+		let symbols = getDocumentSymbols(document.document, this._trees);
         return symbols;
 	}
 }

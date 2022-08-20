@@ -21,7 +21,7 @@ export class DefinitionProvider {
 		const document = await this._documents.retrieve(params.textDocument.uri);
 
 		// find definition globally
-		const tree = this._trees.getParseTree(document);
+		const tree = this._trees.getParseTree(document.document);
 		if (!tree) {
 			return [];
 		}
@@ -31,7 +31,7 @@ export class DefinitionProvider {
 			return [];
 		}
 
-		const symbols = await this._symbols.getDefinitions(id.text, document);
+		const symbols = await this._symbols.getDefinitions(id.text, document.document);
 		return symbols.map(s => s.location);
 	}
 }

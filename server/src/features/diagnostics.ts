@@ -5,10 +5,12 @@ import { connection } from '../connection';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import * as Parser from 'web-tree-sitter';
 import { asLspRange } from '../utils/position';
+import { DirectivesIndex } from './directivesIndex';
 
 export class DiagnosticsProvider {
-    constructor(private readonly _trees: Trees, private readonly _documents: DocumentStore) {
+    constructor(private readonly _trees: Trees, private readonly _deps: DirectivesIndex) {
         this._trees.onParseDone(async (event) => {
+            await _deps.update(event.document, event.tree);
             this.provideDiagnostics(event.document, event.tree);
         })
     }
@@ -36,7 +38,15 @@ export class DiagnosticsProvider {
                 visitTree(child);
             }
         }
-        visitTree(tree.rootNode)
+        visitTree(tree.rootNode);
+
+        let errors = this._deps.getDirectives(document.uri);
+        for (let error of errors.notFound) {
+            diagnostics.push({
+                message: 'Dependency not found: ' + error.path,
+                range: asLspRange(error.node),
+            })
+        }
 
         connection.sendDiagnostics({
             diagnostics,

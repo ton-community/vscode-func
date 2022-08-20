@@ -21,7 +21,7 @@ export class DocumentStore extends TextDocuments<TextDocument> {
 	readonly onDidChangeContent2 = this._onDidChangeContent2.event;
 
 	private readonly _decoder = new TextDecoder();
-	private readonly _fileDocuments: LRUMap<string, Promise<TextDocument>>;
+	private readonly _fileDocuments: LRUMap<string, Promise<{ exists: boolean, document?: TextDocument }>>;
 
 	constructor(private readonly _connection: lsp.Connection) {
 		super({
@@ -52,7 +52,7 @@ export class DocumentStore extends TextDocuments<TextDocument> {
 			}
 		});
 
-		this._fileDocuments = new LRUMap<string, Promise<TextDocument>>({
+		this._fileDocuments = new LRUMap<string, Promise<{ exists: boolean, document?: TextDocument }>>({
 			size: 200,
 			dispose: _entries => { }
 		});
@@ -62,10 +62,10 @@ export class DocumentStore extends TextDocuments<TextDocument> {
 		_connection.onNotification('file-cache/remove', uri => this._fileDocuments.delete(uri));
 	}
 
-	async retrieve(uri: string): Promise<TextDocument> {
+	async retrieve(uri: string): Promise<{ exists: boolean, document?: TextDocument }> {
 		let result = this.get(uri);
 		if (result) {
-			return result;
+			return { exists: true, document: result };
 		}
 		let promise = this._fileDocuments.get(uri);
 		if (!promise) {
@@ -75,10 +75,13 @@ export class DocumentStore extends TextDocuments<TextDocument> {
 		return promise;
 	}
 
-	private async _requestDocument(uri: string): Promise<TextDocument> {
-		const reply = await this._connection.sendRequest<{ type: string, data: any }>('file/read', uri);
+	private async _requestDocument(uri: string): Promise<{ exists: boolean, document?: TextDocument }> {
+		const reply = await this._connection.sendRequest<{ type: 'Buffer', data: any } | { type: 'not-found' }>('file/read', uri);
+		if (reply.type === 'not-found') {
+			return { exists: false, document: undefined };
+		}
         let decoded = this._decoder.decode(new Uint8Array(reply.data));
-		return TextDocument.create(uri, 'func', 1, decoded);
+		return { exists: true, document: TextDocument.create(uri, 'func', 1, decoded) };
 	}
 
 }

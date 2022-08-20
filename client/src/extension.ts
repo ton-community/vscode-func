@@ -117,13 +117,13 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 				return new TextEncoder().encode(doc.getText());
 			} catch (err) {
 				console.warn(err);
-				return new Uint8Array();
+				return { type: 'not-found' };
 			}
 		}
 
 		if (vscode.workspace.fs.isWritableFileSystem(uri.scheme) === undefined) {
 			// undefined means we don't know anything about these uris
-			return new Uint8Array();
+			return { type: 'not-found' };
 		}
 
 		let data: Uint8Array;
@@ -131,16 +131,20 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			const stat = await vscode.workspace.fs.stat(uri);
 			if (stat.size > 1024 ** 2) {
 				console.warn(`IGNORING "${uri.toString()}" because it is too large (${stat.size}bytes)`);
-				data = new Uint8Array();
+				data = Buffer.from(new Uint8Array());
 			} else {
 				data = await vscode.workspace.fs.readFile(uri);
 			}
 			return data;
-
 		} catch (err) {
+			if (err instanceof vscode.FileSystemError) {
+				if (err.code === 'FileNotFound') {
+					return { type: 'not-found' };
+				}
+			}
 			// graceful
 			console.warn(err);
-			return new Uint8Array();
+			return { type: 'not-found' };
 		}
 	});
 
