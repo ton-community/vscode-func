@@ -18,7 +18,9 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
             continue;
         }
         for (let child of descendant.children) {
-            if (child.type == 'expression_statement') {
+            if (child.type === 'statement' && child.children[0].type === 'expression_statement') {
+                child = child.children[0];
+                
                 let variableDeclarations = child.descendantsOfType('variable_declaration', null, cursorPosition);
                 for (let varDec of variableDeclarations) {
                     let identifiers = varDec.descendantsOfType('identifier', null, cursorPosition);

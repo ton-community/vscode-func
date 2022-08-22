@@ -12,9 +12,7 @@ function resolvePathSegment(documentUri: string, path: string) {
 export class DirectivesIndex {
 	private _cache = new Map<string, { includes: string[], notFound: { node: Parser.SyntaxNode, path: string }[] }>();
 
-	constructor(private readonly _trees: Trees, private readonly _documents: DocumentStore) {
-
-	}
+	constructor(private readonly _trees: Trees, private readonly _documents: DocumentStore) {}
 
 	async update(document: TextDocument, tree: Parser.Tree) {
 		let query = queryDirectives(tree.rootNode);
