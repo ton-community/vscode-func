@@ -23,17 +23,16 @@ export class FormattingProvider {
 		while (hasAny) {
 			let node = cursor.currentNode();
 			
-			if (node.type === '}' || node.type === ')') indent--;
+			if (node.type === '}' || node.type === ')' || node.type === ']') indent--;
 
-			edits.push(...formatNode(node, document.document, indent));
+			edits.push(...formatNode(node, document.document, indent, params.options));
 
-			if (node.type === '{' || node.type === '(') indent++;
+			if (node.type === '{' || node.type === '(' || node.type === '[') indent++;
 
+			// walk
 			if (cursor.gotoFirstChild()) {
-				// entering block_statement
 				continue;
 			}
-
 			while (!cursor.gotoNextSibling()) {
 				hasAny = cursor.gotoParent();
 				if (!hasAny) {
@@ -41,6 +40,8 @@ export class FormattingProvider {
 				}
 			}
 		}
+
+		// TODO: process final new line and trailing whitespaces
 		
 		return edits;
 	}

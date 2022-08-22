@@ -1,7 +1,7 @@
 const {commaSep, commaSep1, commaSep2} = require('./utils.js')
 
 module.exports = {
-  _statement: $ => choice(
+  statement: $ => choice(
     $.return_statement,
     $.block_statement,
     $.expression_statement,
@@ -13,7 +13,7 @@ module.exports = {
   ),
 
   return_statement: $ => seq('return', $.expression, ';'),
-  block_statement: $ => seq('{', repeat($._statement), '}'),
+  block_statement: $ => seq('{', repeat($.statement), '}'),
   expression_statement: $ => seq($.expression, ';'),
   empty_statement: $ => ';',
   repeat_statement: $ => seq('repeat', field("count", $.expression), field("body", $.block_statement)),
