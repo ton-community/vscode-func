@@ -65,7 +65,6 @@ export class RenameProvider {
 
 	async performRename(params: lsp.RenameParams): Promise<lsp.WorkspaceEdit | null> {
         let tree = await this._trees.getParseTree(params.textDocument.uri);
-        let document = this._documents.get(params.textDocument.uri);
         let oldIdentifier = tree.rootNode.descendantForPosition(asParserPoint(params.position));
 
         // try to find declaration
@@ -76,7 +75,6 @@ export class RenameProvider {
             let parentBlock = findParentBlock(localDeclaration.node);
             let identifiers = findChildrenWithType(parentBlock, 'identifier', localDeclaration.node.startPosition, parentBlock.endPosition);
             let needToRename = identifiers.filter(a => a.text === oldIdentifier.text);
-            console.log(needToRename);
             return {
                 changes: {
                     [params.textDocument.uri]: needToRename.map(a => ({
