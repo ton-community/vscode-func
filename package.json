@@ -64,7 +64,27 @@
                 "language": "func",
                 "path": "./snippets/snippets.json"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "FunC",
+            "type": "object",
+            "properties": {
+                "func.symbolDiscovery": {
+                    "description": "Set up how extension discovers symbols.",
+                    "type": "string",
+                    "enum": [
+                        "everything",
+                        "only #include"
+                    ],
+                    "default": "only #include"
+                },
+                "func.autocompleteAddParentheses": {
+                    "description": "Add parentheses to autocomplete function suggestions.",
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        }
     },
     "devDependencies": {
         "typescript": "^4.7.4",

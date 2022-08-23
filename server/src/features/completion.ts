@@ -1,4 +1,5 @@
 import * as lsp from 'vscode-languageserver';
+import { config } from '../config';
 import { DocumentStore } from '../documentStore';
 import { findLocals } from '../queries/locals';
 import { Trees } from '../trees';
@@ -52,7 +53,11 @@ export class CompletionItemProvider {
                     continue;
                 }
 
-                if (doc !== params.textDocument.uri && !deps.includes.includes(doc)) {
+                if (
+                    config.symbolDiscovery === 'only #include' && 
+                    doc !== params.textDocument.uri && 
+                    !deps.includes.includes(doc)
+                ) {
                     continue;
                 }
 

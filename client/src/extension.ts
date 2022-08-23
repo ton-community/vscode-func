@@ -44,12 +44,25 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		}
 	};
 
-    const serverModule = context.asAbsolutePath(
+	const serverModule = context.asAbsolutePath(
 		path.join('server', 'out', 'server.js')
 	);
-	const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
+
+	// pass initial configuration to env
+	const extConfig = vscode.workspace.getConfiguration('func');
+	const options = {
+		env: {
+			FUNC_SYMBOL_DISCOVERY: extConfig.get('symbolDiscovery'),
+			FUNC_AUTOCOMPLETE_ADD_PARENTHESES: extConfig.get('autocompleteAddParentheses'),
+		}
+	}
+	const debugOptions = { ...options, execArgv: ['--nolazy', '--inspect=6009'] };
     const serverOptions: ServerOptions = {
-		run: { module: serverModule, transport: TransportKind.ipc },
+		run: { 
+			module: serverModule, 
+			transport: TransportKind.ipc,
+			options: options
+		},
 		debug: {
 			module: serverModule,
 			transport: TransportKind.ipc,
@@ -66,6 +79,16 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 	disposables.push(client.start());
 
 	await client.onReady();
+
+	// notify at configuration change
+	vscode.workspace.onDidChangeConfiguration((change) => {
+		if (change.affectsConfiguration('func')) {
+			client.sendNotification('configuration/change', {
+				symbolDiscovery: vscode.workspace.getConfiguration('func').get('symbolDiscovery'),
+				autocompleteAddParentheses: vscode.workspace.getConfiguration('func').get('autocompleteAddParentheses')
+			});
+		}
+	})
 
 	const langPattern = `**/*.fc`;
 	const watcher = vscode.workspace.createFileSystemWatcher(langPattern);

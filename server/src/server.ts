@@ -15,6 +15,7 @@ import { SymbolIndex } from './features/symbolIndex';
 import { initParser } from './parser';
 import { Trees } from './trees';
 import { RenameProvider } from './features/rename';
+import { mutateConfig } from './config';
 
 
 const features: { register(connection: Connection): any }[] = [];
@@ -34,6 +35,11 @@ connection.onInitialize(async (params: InitializeParams) => {
 	features.push(new DefinitionProvider(documents, trees, symbolIndex));
 	features.push(new FormattingProvider(documents, trees));
 	features.push(new RenameProvider(documents, trees, symbolIndex));
+
+	// manage configuration
+	connection.onNotification('configuration/change', (config) => {
+		mutateConfig(config);
+	});
 
 	// manage symbol index. add/remove files as they are disovered and edited
 	documents.all().forEach(doc => symbolIndex.addFile(doc.uri));
