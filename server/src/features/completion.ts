@@ -3,10 +3,11 @@ import { DocumentStore } from '../documentStore';
 import { findLocals } from '../queries/locals';
 import { Trees } from '../trees';
 import { asParserPoint } from '../utils/position';
+import { DirectivesIndex } from './directivesIndex';
 import { SymbolIndex } from './symbolIndex';
 
 export class CompletionItemProvider {
-    constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees, private readonly _symbols: SymbolIndex) {}
+    constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees, private readonly _symbols: SymbolIndex, private readonly _directives: DirectivesIndex) {}
 
     register(connection: lsp.Connection) {
         connection.client.register(lsp.CompletionRequest.type, {
@@ -40,6 +41,8 @@ export class CompletionItemProvider {
             }))
         }
 
+        let deps = this._directives.getDirectives(params.textDocument.uri);
+
         // global symbols
         await this._symbols.update();
         let symbols = new Set<string>();
@@ -48,6 +51,11 @@ export class CompletionItemProvider {
                 if (symbol.definitions.size === 0) {
                     continue;
                 }
+
+                if (doc !== params.textDocument.uri && !deps.includes.includes(doc)) {
+                    continue;
+                }
+
                 for (let def of symbol.definitions.values()) {
                     if (symbols.has(`${label}_${def}`)) {
                         continue;

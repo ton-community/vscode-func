@@ -35,7 +35,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		revealOutputChannelOn: RevealOutputChannelOn.Never,
 		documentSelector: [{ scheme: 'file', language: 'func' }],
 		synchronize:  {
-			fileEvents: workspace.createFileSystemWatcher('**/.fcrc')
+			fileEvents: workspace.createFileSystemWatcher('**/.func.yml')
 		},
 		initializationOptions: {
 			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './node_modules/web-tree-sitter/tree-sitter.wasm').fsPath,

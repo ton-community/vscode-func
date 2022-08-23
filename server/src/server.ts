@@ -30,7 +30,7 @@ connection.onInitialize(async (params: InitializeParams) => {
 
 	features.push(new DocumentSymbols(documents, trees));
 	features.push(new DiagnosticsProvider(trees, depsIndex));
-	features.push(new CompletionItemProvider(documents, trees, symbolIndex));
+	features.push(new CompletionItemProvider(documents, trees, symbolIndex, depsIndex));
 	features.push(new DefinitionProvider(documents, trees, symbolIndex));
 	features.push(new FormattingProvider(documents, trees));
 	features.push(new RenameProvider(documents, trees, symbolIndex));
