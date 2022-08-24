@@ -5,6 +5,7 @@ import { asLspRange } from '../utils/position';
 const query = parserQuery`
 (function_definition name: (function_name) @function)
 (global_var_declarations _ name: (identifier) @globalVar)
+(constant_declarations _ name: (identifier) @const)
 `
 
 export function queryGlobals(node: Parser.SyntaxNode) {

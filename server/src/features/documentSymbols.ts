@@ -77,6 +77,17 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): Symbol
                     children
                 )
             });
+        } else if (declaration.type == 'const') {
+            result.push({
+                node: declaration.node.parent!,
+                symbol: lsp.DocumentSymbol.create(
+                    declaration.text,
+                    '',
+                    lsp.SymbolKind.Constant,
+                    declaration.range,
+                    declaration.range
+                )
+            });
         }
     }
     return result;

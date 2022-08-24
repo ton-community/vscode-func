@@ -48,7 +48,6 @@ export class CompletionItemProvider {
         }
 
         let deps = this._deps.getIncludedDocuments(params.textDocument.uri);
-        console.log(deps);
 
         // global symbols
         await this._symbols.update();
@@ -57,10 +56,6 @@ export class CompletionItemProvider {
             for (let [doc, symbol] of occurencies.entries()) {
                 if (symbol.definitions.size === 0) {
                     continue;
-                }
-
-                if (doc.endsWith('pidor.fc')) {
-                    console.log(doc, deps.includes(doc));
                 }
 
                 if (
@@ -81,6 +76,8 @@ export class CompletionItemProvider {
                         item.kind = lsp.CompletionItemKind.Function;
                     } else if (def === lsp.SymbolKind.Variable && !onlyFunctions) {
                         item.kind = lsp.CompletionItemKind.Variable;
+                    } else if (def === lsp.SymbolKind.Constant && !onlyFunctions) {
+                        item.kind = lsp.CompletionItemKind.Constant;
                     } else {
                         continue;
                     }
