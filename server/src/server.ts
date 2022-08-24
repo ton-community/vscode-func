@@ -31,18 +31,12 @@ connection.onInitialize(async (params: InitializeParams) => {
 
 	const diagnosticsProvider = new DiagnosticsProvider(depsIndex);
 
-	features.push(new DocumentSymbols(documents, trees));
 	features.push(diagnosticsProvider);
+	features.push(new DocumentSymbols(documents, trees));
 	features.push(new CompletionItemProvider(documents, trees, symbolIndex, depsIndex));
 	features.push(new DefinitionProvider(documents, trees, symbolIndex, depsIndex));
 	features.push(new FormattingProvider(documents, trees));
 	features.push(new RenameProvider(documents, trees, symbolIndex));
-
-	// on parse done
-	trees.onParseDone(async (event) => {
-		await depsIndex.update(event.document, event.tree);
-		diagnosticsProvider.provideDiagnostics(event.document, event.tree);
-	})
 
 	// manage configuration
 	connection.onNotification('configuration/change', (config) => {
@@ -58,6 +52,12 @@ connection.onInitialize(async (params: InitializeParams) => {
 	connection.onRequest('queue/init', uris => {
 		return symbolIndex.initFiles(uris);
 	});
+
+	// on parse done
+	trees.onParseDone(async (event) => {
+		await depsIndex.update(event.document, event.tree);
+		diagnosticsProvider.provideDiagnostics(event.document, event.tree);
+	})
 
 	console.log('FunC language server is READY');
 	

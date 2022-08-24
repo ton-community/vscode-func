@@ -83,7 +83,7 @@
 				"match": "\\b(var|int|slice|tuple|cell|builder|cont|_)(?=[\\s\\),\\[\\]])"
 			}, {
 				"name": "storage.modifier",
-				"match": "\\b(global)\\b"
+				"match": "\\b(global|const)\\b"
 			}]
 		},
 		"variables": {

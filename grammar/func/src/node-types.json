@@ -87,6 +87,47 @@
     }
   },
   {
+    "type": "constant_declarations",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "constant_type",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "constant_type",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "do_statement",
     "named": true,
     "fields": {
@@ -151,6 +192,14 @@
         },
         {
           "type": "primitive_type",
+          "named": true
+        },
+        {
+          "type": "slice_string_literal",
+          "named": true
+        },
+        {
+          "type": "string_literal",
           "named": true
         },
         {
@@ -239,6 +288,14 @@
           },
           {
             "type": "primitive_type",
+            "named": true
+          },
+          {
+            "type": "slice_string_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
             "named": true
           },
           {
@@ -588,6 +645,14 @@
           },
           {
             "type": "primitive_type",
+            "named": true
+          },
+          {
+            "type": "slice_string_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
             "named": true
           },
           {
@@ -1000,6 +1065,10 @@
       "types": [
         {
           "type": "compiler_directive",
+          "named": true
+        },
+        {
+          "type": "constant_declarations",
           "named": true
         },
         {
@@ -1426,6 +1495,10 @@
     "named": true
   },
   {
+    "type": "const",
+    "named": false
+  },
+  {
     "type": "cont",
     "named": false
   },
@@ -1508,6 +1581,10 @@
   {
     "type": "slice",
     "named": false
+  },
+  {
+    "type": "slice_string_literal",
+    "named": true
   },
   {
     "type": "string_literal",

@@ -117,6 +117,8 @@ module.exports = {
     $.primitive_type,
     $.identifier,
     $.number_literal,
+    $.string_literal,
+    $.slice_string_literal,
     $.underscore
   )),
 

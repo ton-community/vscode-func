@@ -34,6 +34,11 @@ module.exports = {
     'tuple',
   ),
 
+  constant_type: $ => choice(
+    'int',
+    'slice',
+  ),
+
   tensor_type: $ => seq('(', commaSep2($._type), ')'),
 
   tuple_type: $ => seq('[', commaSep($._type), ']'),

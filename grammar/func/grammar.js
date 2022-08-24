@@ -20,7 +20,8 @@ module.exports = grammar({
     _top_level_item: $ => choice(
       $.function_definition,
       $.global_var_declarations,
-      $.compiler_directive
+      $.compiler_directive,
+      $.constant_declarations,
     ),
 
     compiler_directive: $ => seq(choice($.include_directive, $.pragma_directive), ';'),
@@ -40,10 +41,21 @@ module.exports = grammar({
       commaSep1($._global_var_declaration),
       ';'
     ),
-
     _global_var_declaration: $ => seq(
       field('type', optional($._type)),
       field('name', $.identifier),
+    ),
+
+    constant_declarations: $ => seq(
+      'const',
+      commaSep1($._constant_declaration),
+      ';'
+    ),
+    _constant_declaration: $ => seq(
+      field('type', optional($.constant_type)),
+      field('name', $.identifier),
+      '=',
+      field('value', choice($.expression)) // todo: make constant expression
     ),
 
     ...types,
