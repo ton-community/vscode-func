@@ -60,7 +60,12 @@ export class Trees {
 	getParseTree(documentOrUri: TextDocument): Parser.Tree | undefined;
 	getParseTree(documentOrUri: TextDocument | string): Promise<Parser.Tree | undefined> | Parser.Tree | undefined {
 		if (typeof documentOrUri === 'string') {
-			return this._documents.retrieve(documentOrUri).then(doc => this._parse(doc.document));
+			return this._documents.retrieve(documentOrUri).then(doc => {
+				if (!doc.exists) {
+					return undefined;
+				}
+				return this._parse(doc.document);
+			});
 		} else {
 			return this._parse(documentOrUri);
 		}

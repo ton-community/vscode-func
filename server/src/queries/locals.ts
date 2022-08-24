@@ -1,10 +1,11 @@
 import * as Parser from 'web-tree-sitter';
 
 export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.Point) {
-    let descendant = rootNode.descendantForPosition(cursorPosition);
+    let descendant: Parser.SyntaxNode | null = rootNode.descendantForPosition(cursorPosition);
     
     let result: {
         node: Parser.SyntaxNode,
+        declaration: Parser.SyntaxNode,
         kind: 'variable',
         text: string
     }[] = [];
@@ -21,11 +22,12 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
             if (child.type === 'statement' && child.children[0].type === 'expression_statement') {
                 child = child.children[0];
                 
-                let variableDeclarations = child.descendantsOfType('variable_declaration', null, cursorPosition);
+                let variableDeclarations = child.descendantsOfType('variable_declaration', undefined, cursorPosition);
                 for (let varDec of variableDeclarations) {
-                    let identifiers = varDec.descendantsOfType('identifier', null, cursorPosition);
+                    let identifiers = varDec.descendantsOfType('identifier', undefined, cursorPosition);
                     result.push(...identifiers.map(a => ({
                         node: a,
+                        declaration: varDec,
                         kind: 'variable' as 'variable', // Typescript wtf???
                         text: a.text,
                     })))
@@ -42,6 +44,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
                 
                 result.push({
                     node: node,
+                    declaration: param,
                     kind: 'variable' as 'variable', // Typescript wtf???
                     text: node.text,
                 });

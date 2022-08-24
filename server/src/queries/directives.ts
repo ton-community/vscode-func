@@ -13,12 +13,12 @@ export function queryDirectives(node: Parser.SyntaxNode) {
 
     return {
         includes: includes.map(a => ({
-            path: a.node.childForFieldName('path').text,
+            path: a.node.childForFieldName('path')!.text,
             node: a.node,
         })),
         pramgas: pramgas.map(a => ({
-            key: a.node.childForFieldName('key').text,
-            value: a.node.childForFieldName('value').text,
+            key: a.node.childForFieldName('key')!.text,
+            value: a.node.childForFieldName('value')!.text,
             node: a.node
         }))
     }

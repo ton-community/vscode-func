@@ -4,11 +4,16 @@ import { DocumentStore } from '../documentStore';
 import { findLocals } from '../queries/locals';
 import { Trees } from '../trees';
 import { asParserPoint } from '../utils/position';
-import { DirectivesIndex } from './directivesIndex';
+import { DepsIndex } from './depsIndex';
 import { SymbolIndex } from './symbolIndex';
 
 export class CompletionItemProvider {
-    constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees, private readonly _symbols: SymbolIndex, private readonly _directives: DirectivesIndex) {}
+    constructor(
+        private readonly _documents: DocumentStore,
+        private readonly _trees: Trees, 
+        private readonly _symbols: SymbolIndex, 
+        private readonly _deps: DepsIndex
+    ) {}
 
     register(connection: lsp.Connection) {
         connection.client.register(lsp.CompletionRequest.type, {
@@ -20,7 +25,7 @@ export class CompletionItemProvider {
 
     async provideCompletionItems(params: lsp.CompletionParams): Promise<lsp.CompletionItem[]> {
         const document = await this._documents.retrieve(params.textDocument.uri);
-		const tree = this._trees.getParseTree(document.document);
+		const tree = this._trees.getParseTree(document.document!);
 		if (!tree) {
 			return [];
 		}
@@ -42,7 +47,8 @@ export class CompletionItemProvider {
             }))
         }
 
-        let deps = this._directives.getDirectives(params.textDocument.uri);
+        let deps = this._deps.getIncludedDocuments(params.textDocument.uri);
+        console.log(deps);
 
         // global symbols
         await this._symbols.update();
@@ -53,10 +59,14 @@ export class CompletionItemProvider {
                     continue;
                 }
 
+                if (doc.endsWith('pidor.fc')) {
+                    console.log(doc, deps.includes(doc));
+                }
+
                 if (
                     config.symbolDiscovery === 'only #include' && 
                     doc !== params.textDocument.uri && 
-                    !deps.includes.includes(doc)
+                    !deps.includes(doc)
                 ) {
                     continue;
                 }

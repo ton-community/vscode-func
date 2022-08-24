@@ -12,7 +12,7 @@ export class FormattingProvider {
 	}
 
 	async provideDocumentFormattingEdits(params: lsp.DocumentFormattingParams): Promise<lsp.TextEdit[] | null> {
-		const tree = await this._trees.getParseTree(params.textDocument.uri);
+		const tree = (await this._trees.getParseTree(params.textDocument.uri))!;
 		const document = await this._documents.retrieve(params.textDocument.uri);
 		let edits: lsp.TextEdit[] = [];
 		console.log('Formatting document');
@@ -25,7 +25,7 @@ export class FormattingProvider {
 			
 			if (node.type === '}' || node.type === ')' || node.type === ']') indent--;
 
-			edits.push(...formatNode(node, document.document, indent, params.options));
+			edits.push(...formatNode(node, document.document!, indent, params.options));
 
 			if (node.type === '{' || node.type === '(' || node.type === '[') indent++;
 

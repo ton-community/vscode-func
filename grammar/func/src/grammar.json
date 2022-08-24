@@ -1002,10 +1002,6 @@
             "name": "primitive_type"
           },
           {
-            "type": "STRING",
-            "value": "type"
-          },
-          {
             "type": "SYMBOL",
             "name": "var_type"
           },

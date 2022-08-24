@@ -100,7 +100,6 @@ module.exports = {
 
   type_expression: $ => prec(101, choice(
     $.primitive_type,
-    "type",
     $.var_type,
     $.parenthesized_type_expression,
     $.tensor_type_expression,

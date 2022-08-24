@@ -5,7 +5,7 @@ import { DocumentStore } from '../documentStore';
 import { Trees } from '../trees';
 import { batchExecute } from '../utils/batchExecute';
 import { Trie } from '../utils/trie';
-import { getDocumentSymbols } from './documentSymbols';
+import { getDocumentSymbols, SymbolMeta } from './documentSymbols';
 import { getDocumentUsages, IUsage } from './references';
 
 class Queue {
@@ -169,7 +169,7 @@ export class SymbolIndex {
 			// update index
 			const _t1Index = performance.now();
 			try {
-				this._doIndex(document.document);
+				this._doIndex(document.document!);
 			} catch (e) {
 				console.log(`FAILED to index ${uri}`, e);
 			}
@@ -179,7 +179,7 @@ export class SymbolIndex {
 		};
 	}
 
-	private _doIndex(document: TextDocument, symbols?: lsp.DocumentSymbol[], usages?: IUsage[]): void {
+	private _doIndex(document: TextDocument, symbols?: SymbolMeta[], usages?: IUsage[]): void {
 
 		const symbolInfo = new Map<string, SymbolInfo>();
 
@@ -187,7 +187,7 @@ export class SymbolIndex {
 		if (!symbols) {
 			symbols = getDocumentSymbols(document, this._trees);
 		}
-		for (const symbol of symbols) {
+		for (const { symbol } of symbols) {
 			const all = symbolInfo.get(symbol.name);
 			if (all) {
 				all.definitions.add(symbol.kind);
@@ -221,7 +221,7 @@ export class SymbolIndex {
 
 	// ---
 
-	async getDefinitions(ident: string, source: TextDocument) {
+	async getDefinitions(ident: string, documents?: string[]) {
 
 		await this.update();
 
@@ -237,9 +237,13 @@ export class SymbolIndex {
 				continue;
 			}
 
+			if (documents !== undefined && !documents.includes(uri)) {
+				continue;
+			}
+
 			work.push(this._documents.retrieve(uri).then(document => {
-				const symbols = getDocumentSymbols(document.document, this._trees);
-				for (const item of symbols) {
+				const symbols = getDocumentSymbols(document.document!, this._trees);
+				for (const { symbol: item } of symbols) {
 					if (item.name === ident) {
 						const info = lsp.SymbolInformation.create(item.name, item.kind, item.selectionRange, uri);
 						result.unshift(info);
@@ -248,8 +252,8 @@ export class SymbolIndex {
 
 				// update index
 				setTimeout(() => {
-					this._asyncQueue.dequeue(document.document.uri);
-					this._doIndex(document.document, symbols);
+					this._asyncQueue.dequeue(document.document!.uri);
+					this._doIndex(document.document!, symbols);
 				});
 
 			}).catch(err => {
@@ -261,7 +265,7 @@ export class SymbolIndex {
 		return result;
 	}
 
-	async getUsages(ident: string, source: TextDocument) {
+	async getUsages(ident: string) {
 
 		await this.update();
 
@@ -278,7 +282,7 @@ export class SymbolIndex {
 			}
 
 			work.push(this._documents.retrieve(uri).then(document => {
-				const usages = getDocumentUsages(document.document, this._trees);
+				const usages = getDocumentUsages(document.document!, this._trees);
 				for (const item of usages) {
 					if (item.name === ident) {
 						const location = lsp.Location.create(uri, item.range);
@@ -288,8 +292,8 @@ export class SymbolIndex {
 
 				// update index
 				setTimeout(() => {
-					this._asyncQueue.dequeue(document.document.uri);
-					this._doIndex(document.document, undefined, usages);
+					this._asyncQueue.dequeue(document.document!.uri);
+					this._doIndex(document.document!, undefined, usages);
 				});
 
 			}).catch(err => {

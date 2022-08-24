@@ -66,7 +66,7 @@ const indent: Formatter = (node, document, indent, options: lsp.FormattingOption
 }
 
 const ifParentNot = (types: string[], formatter: Formatter) => (node: Parser.SyntaxNode, document: TextDocument, indent: number, options: lsp.FormattingOptions) => {
-    if (types.includes(node.parent?.type)) {
+    if (types.includes(node.parent!.type)) {
         return [];
     }
     return formatter(node, document, indent, options);

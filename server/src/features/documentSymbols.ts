@@ -4,6 +4,7 @@ import { DocumentStore } from '../documentStore';
 import { Trees } from '../trees';
 import { queryGlobals } from '../queries/globals';
 import { asLspRange } from '../utils/position';
+import * as Parser from 'web-tree-sitter';
 
 export class DocumentSymbols {
 	constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees) { }
@@ -15,23 +16,28 @@ export class DocumentSymbols {
 
 	async provideDocumentSymbols(params: lsp.DocumentSymbolParams): Promise<lsp.DocumentSymbol[]> {
 		const document = await this._documents.retrieve(params.textDocument.uri);
-		let symbols = getDocumentSymbols(document.document, this._trees);
-        return symbols;
+		let symbols = getDocumentSymbols(document.document!, this._trees);
+        return symbols.map(a => a.symbol);
 	}
 }
 
-export function getDocumentSymbols(document: TextDocument, trees: Trees): lsp.DocumentSymbol[] {
+
+export type SymbolMeta = { 
+    symbol: lsp.DocumentSymbol, 
+    node: Parser.SyntaxNode
+}
+export function getDocumentSymbols(document: TextDocument, trees: Trees): SymbolMeta[] {
 	const tree = trees.getParseTree(document);
 	if (!tree) {
 		return [];
 	}
     const globals = queryGlobals(tree.rootNode);
 
-    const result: lsp.DocumentSymbol[] = [];
+    const result: SymbolMeta[] = [];
     for (let declaration of globals) {
         let children: lsp.DocumentSymbol[] = []
         if (declaration.type == 'function') {
-            let body = declaration.node.parent.childForFieldName('body');
+            let body = declaration.node.parent!.childForFieldName('body');
             if (body) {
                 let declarations = body.descendantsOfType('variable_declaration')
                 for (let node of declarations) {
@@ -48,19 +54,21 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): lsp.Do
                     }))
                 }
             }
-            result.push(
-                lsp.DocumentSymbol.create(
+            result.push({
+                node: declaration.node.parent!,
+                symbol: lsp.DocumentSymbol.create(
                     declaration.text, 
                     '', 
                     lsp.SymbolKind.Function, 
-                    asLspRange(declaration.node.parent),
+                    asLspRange(declaration.node.parent!),
                     declaration.range, 
                     children
-                )
-            );
+                ),
+            });
         } else if (declaration.type == 'globalVar') {
-            result.push(
-                lsp.DocumentSymbol.create(
+            result.push({
+                node: declaration.node.parent!,
+                symbol: lsp.DocumentSymbol.create(
                     declaration.text, 
                     '', 
                     lsp.SymbolKind.Variable, 
@@ -68,7 +76,7 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): lsp.Do
                     declaration.range,
                     children
                 )
-            );
+            });
         }
     }
     return result;

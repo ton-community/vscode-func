@@ -1,18 +1,12 @@
-import { DocumentStore } from '../documentStore';
 import * as lsp from 'vscode-languageserver';
-import { Trees } from '../trees';
 import { connection } from '../connection';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import * as Parser from 'web-tree-sitter';
 import { asLspRange } from '../utils/position';
-import { DirectivesIndex } from './directivesIndex';
+import { DepsIndex } from './depsIndex';
 
 export class DiagnosticsProvider {
-    constructor(private readonly _trees: Trees, private readonly _deps: DirectivesIndex) {
-        this._trees.onParseDone(async (event) => {
-            await _deps.update(event.document, event.tree);
-            this.provideDiagnostics(event.document, event.tree);
-        })
+    constructor(private readonly _deps: DepsIndex) {
     }
 
     register(connection: lsp.Connection) {
@@ -40,8 +34,8 @@ export class DiagnosticsProvider {
         }
         visitTree(tree.rootNode);
 
-        let errors = this._deps.getDirectives(document.uri);
-        for (let error of errors.notFound) {
+        let errors = this._deps.getNotFound(document.uri);
+        for (let error of errors) {
             diagnostics.push({
                 message: 'Dependency not found: ' + error.path,
                 range: asLspRange(error.node),
