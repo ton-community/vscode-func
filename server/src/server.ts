@@ -29,7 +29,7 @@ connection.onInitialize(async (params: InitializeParams) => {
 	const symbolIndex = new SymbolIndex(trees, documents);
 	const depsIndex = new DepsIndex(trees, documents);
 
-	const diagnosticsProvider = new DiagnosticsProvider(depsIndex);
+	const diagnosticsProvider = new DiagnosticsProvider(depsIndex, symbolIndex);
 
 	features.push(diagnosticsProvider);
 	features.push(new DocumentSymbols(documents, trees));

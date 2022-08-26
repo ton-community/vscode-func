@@ -82,6 +82,11 @@
                     "description": "Add parentheses to autocomplete function suggestions.",
                     "type": "boolean",
                     "default": true
+                },
+                "func.experimentalDiagnostics": {
+                    "description": "Enable experimental diagnostics.",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         }

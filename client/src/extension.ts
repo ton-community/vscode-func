@@ -54,6 +54,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		env: {
 			FUNC_SYMBOL_DISCOVERY: extConfig.get('symbolDiscovery'),
 			FUNC_AUTOCOMPLETE_ADD_PARENTHESES: extConfig.get('autocompleteAddParentheses'),
+			FUNC_EXPRERIMENTAL_DIAGNOSTICS: extConfig.get('experimentalDiagnostics'),
 		}
 	}
 	const debugOptions = { ...options, execArgv: ['--nolazy', '--inspect=6009'] };
@@ -132,7 +133,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			return files
 				.filter(([path, type]) => {
 					if (path === toSearch) return false;
-					
+
 					return path.startsWith(toSearch) && (type !== vscode.FileType.File || path.endsWith('.fc'));
 				})
 				.map(([segment, type]) => {
@@ -151,7 +152,8 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		if (change.affectsConfiguration('func')) {
 			client.sendNotification('configuration/change', {
 				symbolDiscovery: vscode.workspace.getConfiguration('func').get('symbolDiscovery'),
-				autocompleteAddParentheses: vscode.workspace.getConfiguration('func').get('autocompleteAddParentheses')
+				autocompleteAddParentheses: vscode.workspace.getConfiguration('func').get('autocompleteAddParentheses'),
+				experimentalDiagnostics: vscode.workspace.getConfiguration('func').get('experimentalDiagnostics'),
 			});
 		}
 	})
