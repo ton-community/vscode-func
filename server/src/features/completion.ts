@@ -1,11 +1,14 @@
 import * as lsp from 'vscode-languageserver';
+import * as Parser from 'web-tree-sitter';
 import { config } from '../config';
+import { connection } from '../connection';
 import { DocumentStore } from '../documentStore';
 import { findLocals } from '../queries/locals';
 import { Trees } from '../trees';
 import { asParserPoint } from '../utils/position';
 import { DepsIndex } from './depsIndex';
 import { SymbolIndex } from './symbolIndex';
+import { stringifyType } from './typeInference';
 
 export class CompletionItemProvider {
     constructor(
@@ -23,6 +26,18 @@ export class CompletionItemProvider {
         connection.onRequest(lsp.CompletionRequest.type, this.provideCompletionItems.bind(this));
     }
 
+
+    async provideIncludeCompletionItems(params: lsp.CompletionParams, node: Parser.SyntaxNode): Promise<lsp.CompletionItem[]> {
+        let matching: string[] = await connection.sendRequest('completion/matching-files', { pathPrefix: node.text.slice(1).slice(0, -1), uri: params.textDocument.uri });
+        let result: lsp.CompletionItem[] = [];
+        for (let match of matching) {
+            let item = lsp.CompletionItem.create(match);
+            item.kind = lsp.CompletionItemKind.File;
+            result.push(item);
+        }
+        return result;
+    }
+
     async provideCompletionItems(params: lsp.CompletionParams): Promise<lsp.CompletionItem[]> {
         const document = await this._documents.retrieve(params.textDocument.uri);
 		const tree = this._trees.getParseTree(document.document!);
@@ -30,19 +45,25 @@ export class CompletionItemProvider {
 			return [];
 		}
 
-        let onlyFunctions = false;
+        let cursorPosition = asParserPoint(params.position);
+        let cursorNode = tree.rootNode.descendantForPosition(cursorPosition);
+        if (cursorNode.type === 'string_literal' && cursorNode.parent && cursorNode.parent.type === 'include_directive') {
+            return this.provideIncludeCompletionItems(params, cursorNode);
+        }
+
+        let isFunctionApplication = false;
         if (params.context?.triggerCharacter === '.' || params.context?.triggerCharacter === '~') {
-            onlyFunctions = true;
+            isFunctionApplication = true;
         }
 
         let result: lsp.CompletionItem[] = [];
 
         // local symbols
-        if (!onlyFunctions) {
-            let cursorPosition = asParserPoint(params.position);
+        if (!isFunctionApplication) {
             result.push(...findLocals(tree.rootNode, cursorPosition).map(a => {
                 let item = lsp.CompletionItem.create(a.text);
                 item.kind = lsp.CompletionItemKind.Variable;
+                item.detail = stringifyType(a.type);
                 return item;
             }))
         }
@@ -66,7 +87,7 @@ export class CompletionItemProvider {
                     continue;
                 }
 
-                for (let def of symbol.definitions.values()) {
+                for (let [def, type] of symbol.definitions.entries()) {
                     if (symbols.has(`${label}_${def}`)) {
                         continue;
                     } 
@@ -74,13 +95,26 @@ export class CompletionItemProvider {
                     let item = lsp.CompletionItem.create(label);
                     if (def === lsp.SymbolKind.Function) {
                         item.kind = lsp.CompletionItemKind.Function;
-                    } else if (def === lsp.SymbolKind.Variable && !onlyFunctions) {
+                        if (config.autocompleteAddParentheses && type.kind === 'function') {
+                            let fArgs = [...type.arguments];
+                            if (isFunctionApplication) {
+                                let firstArg = fArgs.shift();
+                                if (!firstArg) {
+                                    continue;
+                                }
+                            };
+                            item.insertText = `${label}(${fArgs.map((a, i) => `$\{${i+1}:${a.name}}`)})`;
+                            item.insertTextFormat = lsp.InsertTextFormat.Snippet;
+                        }
+                    } else if (def === lsp.SymbolKind.Variable && !isFunctionApplication) {
                         item.kind = lsp.CompletionItemKind.Variable;
-                    } else if (def === lsp.SymbolKind.Constant && !onlyFunctions) {
+                    } else if (def === lsp.SymbolKind.Constant && !isFunctionApplication) {
                         item.kind = lsp.CompletionItemKind.Constant;
                     } else {
                         continue;
                     }
+                    item.detail = stringifyType(type);
+                    // item.documentation = stringifyType(type);
                     result.push(item);
                 }
             }

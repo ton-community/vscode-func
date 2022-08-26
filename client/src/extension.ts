@@ -80,6 +80,72 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 
 	await client.onReady();
 
+	// serve fileRead request
+	client.onRequest('file/read', async raw => {
+		const uri = vscode.Uri.parse(raw);
+
+		if (uri.scheme === 'vscode-notebook-cell') {
+			// we are dealing with a notebook
+			try {
+				const doc = await vscode.workspace.openTextDocument(uri);
+				return new TextEncoder().encode(doc.getText());
+			} catch (err) {
+				console.warn(err);
+				return { type: 'not-found' };
+			}
+		}
+
+		if (vscode.workspace.fs.isWritableFileSystem(uri.scheme) === undefined) {
+			// undefined means we don't know anything about these uris
+			return { type: 'not-found' };
+		}
+
+		let data: Uint8Array;
+		try {
+			const stat = await vscode.workspace.fs.stat(uri);
+			if (stat.size > 1024 ** 2) {
+				console.warn(`IGNORING "${uri.toString()}" because it is too large (${stat.size}bytes)`);
+				data = Buffer.from(new Uint8Array());
+			} else {
+				data = await vscode.workspace.fs.readFile(uri);
+			}
+			return data;
+		} catch (err) {
+			if (err instanceof vscode.FileSystemError) {
+				if (err.code === 'FileNotFound' || err.code === 'FileIsADirectory') {
+					return { type: 'not-found' };
+				}
+			}
+			// graceful
+			console.warn(err);
+			return { type: 'not-found' };
+		}
+	});
+
+	client.onRequest('completion/matching-files', async (raw: { pathPrefix: string, uri: string }) => {
+		const uri = vscode.Uri.parse(raw.uri);
+		let searchDirName = vscode.Uri.joinPath(uri, '..', raw.pathPrefix, (raw.pathPrefix.trim().length === 0 || raw.pathPrefix.endsWith(path.sep)) ? '' : '..');
+		let toSearch = raw.pathPrefix.split(path.sep).pop() ?? '';
+
+		try {
+			let files = await vscode.workspace.fs.readDirectory(searchDirName);
+			return files
+				.filter(([path, type]) => {
+					if (path === toSearch) return false;
+					
+					return path.startsWith(toSearch) && (type !== vscode.FileType.File || path.endsWith('.fc'));
+				})
+				.map(([segment, type]) => {
+					if (type === vscode.FileType.Directory) {
+						return segment + path.sep;
+					}
+					return segment;
+				});
+		} catch {
+			return [];
+		}
+	});
+
 	// notify at configuration change
 	vscode.workspace.onDidChangeConfiguration((change) => {
 		if (change.affectsConfiguration('func')) {
@@ -128,48 +194,6 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		client.sendNotification('queue/add', uri.toString());
 		client.sendNotification('file-cache/remove', uri.toString());
 	}));
-
-	// serve fileRead request
-	client.onRequest('file/read', async raw => {
-		const uri = vscode.Uri.parse(raw);
-
-		if (uri.scheme === 'vscode-notebook-cell') {
-			// we are dealing with a notebook
-			try {
-				const doc = await vscode.workspace.openTextDocument(uri);
-				return new TextEncoder().encode(doc.getText());
-			} catch (err) {
-				console.warn(err);
-				return { type: 'not-found' };
-			}
-		}
-
-		if (vscode.workspace.fs.isWritableFileSystem(uri.scheme) === undefined) {
-			// undefined means we don't know anything about these uris
-			return { type: 'not-found' };
-		}
-
-		let data: Uint8Array;
-		try {
-			const stat = await vscode.workspace.fs.stat(uri);
-			if (stat.size > 1024 ** 2) {
-				console.warn(`IGNORING "${uri.toString()}" because it is too large (${stat.size}bytes)`);
-				data = Buffer.from(new Uint8Array());
-			} else {
-				data = await vscode.workspace.fs.readFile(uri);
-			}
-			return data;
-		} catch (err) {
-			if (err instanceof vscode.FileSystemError) {
-				if (err.code === 'FileNotFound') {
-					return { type: 'not-found' };
-				}
-			}
-			// graceful
-			console.warn(err);
-			return { type: 'not-found' };
-		}
-	});
 
 	return new vscode.Disposable(() => disposables.forEach(d => d.dispose()));
 }

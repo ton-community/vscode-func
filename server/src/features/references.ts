@@ -1,4 +1,5 @@
 import * as lsp from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { Trees } from '../trees';
 
 export interface IUsage {
@@ -7,6 +8,6 @@ export interface IUsage {
 	kind: lsp.SymbolKind;
 }
 
-export function getDocumentUsages(document: lsp.TextDocument, trees: Trees): IUsage[] {
+export function getDocumentUsages(document: TextDocument, trees: Trees): IUsage[] {
 	return [];
 }

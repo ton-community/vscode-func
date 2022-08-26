@@ -7,6 +7,7 @@ import { batchExecute } from '../utils/batchExecute';
 import { Trie } from '../utils/trie';
 import { getDocumentSymbols, SymbolMeta } from './documentSymbols';
 import { getDocumentUsages, IUsage } from './references';
+import { FuncType } from './typeInference';
 
 class Queue {
 
@@ -45,7 +46,7 @@ class Queue {
 }
 
 interface SymbolInfo {
-	definitions: Set<lsp.SymbolKind>
+	definitions: Map<lsp.SymbolKind, FuncType>
 	usages: Set<lsp.SymbolKind>
 }
 
@@ -187,12 +188,12 @@ export class SymbolIndex {
 		if (!symbols) {
 			symbols = getDocumentSymbols(document, this._trees);
 		}
-		for (const { symbol } of symbols) {
+		for (const { symbol, funcType } of symbols) {
 			const all = symbolInfo.get(symbol.name);
 			if (all) {
-				all.definitions.add(symbol.kind);
+				all.definitions.set(symbol.kind, funcType);
 			} else {
-				symbolInfo.set(symbol.name, { definitions: new Set([symbol.kind]), usages: new Set() });
+				symbolInfo.set(symbol.name, { definitions: new Map([[symbol.kind, funcType]]), usages: new Set() });
 			}
 		}
 
@@ -205,7 +206,7 @@ export class SymbolIndex {
 			if (all) {
 				all.usages.add(usage.kind);
 			} else {
-				symbolInfo.set(usage.name, { definitions: new Set(), usages: new Set([usage.kind]) });
+				symbolInfo.set(usage.name, { definitions: new Map(), usages: new Set([usage.kind]) });
 			}
 		}
 

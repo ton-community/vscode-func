@@ -87,11 +87,11 @@
     }
   },
   {
-    "type": "constant_declarations",
+    "type": "constant_declaration",
     "named": true,
     "fields": {
       "name": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
@@ -101,7 +101,7 @@
         ]
       },
       "type": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
@@ -111,7 +111,7 @@
         ]
       },
       "value": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
@@ -120,6 +120,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "constant_declarations",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constant_declaration",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -474,11 +489,11 @@
     }
   },
   {
-    "type": "global_var_declarations",
+    "type": "global_var_declaration",
     "named": true,
     "fields": {
       "name": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
@@ -533,6 +548,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "global_var_declarations",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "global_var_declaration",
+          "named": true
+        }
+      ]
     }
   },
   {

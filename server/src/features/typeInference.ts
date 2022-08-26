@@ -13,7 +13,10 @@ type CompositeType = {
 
 export type FunctionType = {
     kind: 'function',
-    arguments: FuncType[],
+    arguments: {
+        name?: string,
+        type: FuncType
+    }[],
     returns: FuncType
 }
 
@@ -30,7 +33,7 @@ export type AtomicType = PrimitiveType | UnitType | VarType | HoleType | Generic
 
 export type FuncType = AtomicType | FunctionType;
 
-export function inferType(typeNode: Parser.SyntaxNode): FuncType {
+export function extractType(typeNode: Parser.SyntaxNode): FuncType {
     if (typeNode.type === 'primitive_type') {
         return {
             kind: 'primitive',
@@ -39,7 +42,7 @@ export function inferType(typeNode: Parser.SyntaxNode): FuncType {
     } else if (typeNode.type === 'tensor_type' || typeNode.type === 'tuple_type') {
         return {
             kind: typeNode.type === 'tensor_type' ? 'tensor' : 'tuple',
-            shape: typeNode.children.map(a => inferType(a))
+            shape: typeNode.children.map(a => extractType(a))
         }
     } else if (typeNode.type === 'var_type') {
         return { kind: 'var' }
@@ -59,10 +62,10 @@ export function inferType(typeNode: Parser.SyntaxNode): FuncType {
 export function inferVariableTypeFromDeclaration(node: Parser.SyntaxNode): FuncType {
     if (node.type === 'variable_declaration') {
         let variableType = node.childForFieldName('type')!.child(0);
-        return inferType(variableType!);
-    } else if (node.type === 'parameter_declaration') {
+        return extractType(variableType!);
+    } else if (node.type === 'parameter_declaration' || node.type === 'global_var_declaration' || node.type === 'constant_declaration') {
         let type = node.childForFieldName('type');
-        return inferType(type!);
+        return extractType(type!);
     }
     return { kind: 'var' };
 }
@@ -70,22 +73,44 @@ export function inferVariableTypeFromDeclaration(node: Parser.SyntaxNode): FuncT
 export function inferFunctionType(node: Parser.SyntaxNode): FuncType {
     if (node.type === 'function_definition') {
         // return_type
+        let returnType = node.childForFieldName('return_type');
+        let parameters = node.descendantsOfType('parameter_declaration');
         return {
             kind: 'function',
-            arguments: [{
-                kind: 'primitive',
-                name: 'int'
-            }, {
-                kind: 'primitive',
-                name: 'int'
-            }],
-            returns: {
-                kind: 'primitive',
-                name: 'slice'
-            }
+            arguments: parameters.map(param => ({
+                name: param.childForFieldName('name')!.text,
+                type: extractType(param)
+            })),
+            returns: extractType(returnType!)
         }
     }
     
     // fallback to hole
     return { kind: 'hole' };
+}
+
+export function stringifyType(type: FuncType): string {
+    if (type.kind === 'primitive') {
+        return type.name;
+    } else if (type.kind === 'function') {
+        let args = type.arguments.map(a => {
+            let type = stringifyType(a.type);
+            if (a.name) return `${type} ${a.name}`;
+            return type;
+        }).join(', ');
+        return `(${args}) -> ${stringifyType(type.returns)}`;
+    } else if (type.kind === 'var') {
+        return 'var';
+    } else if (type.kind === 'unit') {
+        return '()';
+    } else if (type.kind === 'hole') {
+        return '_';
+    } else if (type.kind === 'generic') {
+        return type.name;
+    } else if (type.kind === 'tensor') {
+        return `(${type.shape.map(a => stringifyType(a)).join(', ')})`;
+    } else if (type.kind === 'tuple') {
+        return `(${type.shape.map(a => stringifyType(a)).join(', ')})`;
+    }
+    return '_';
 }

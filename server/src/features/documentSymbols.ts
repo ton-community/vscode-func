@@ -5,6 +5,7 @@ import { Trees } from '../trees';
 import { queryGlobals } from '../queries/globals';
 import { asLspRange } from '../utils/position';
 import * as Parser from 'web-tree-sitter';
+import { FuncType, inferFunctionType, inferVariableTypeFromDeclaration, stringifyType } from './typeInference';
 
 export class DocumentSymbols {
 	constructor(private readonly _documents: DocumentStore, private readonly _trees: Trees) { }
@@ -24,7 +25,8 @@ export class DocumentSymbols {
 
 export type SymbolMeta = { 
     symbol: lsp.DocumentSymbol, 
-    node: Parser.SyntaxNode
+    node: Parser.SyntaxNode,
+    funcType: FuncType
 }
 export function getDocumentSymbols(document: TextDocument, trees: Trees): SymbolMeta[] {
 	const tree = trees.getParseTree(document);
@@ -64,6 +66,7 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): Symbol
                     declaration.range, 
                     children
                 ),
+                funcType: inferFunctionType(declaration.node.parent!)
             });
         } else if (declaration.type == 'globalVar') {
             result.push({
@@ -74,8 +77,9 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): Symbol
                     lsp.SymbolKind.Variable, 
                     declaration.range, 
                     declaration.range,
-                    children
-                )
+                    children,
+                ),
+                funcType: inferVariableTypeFromDeclaration(declaration.node.parent!)
             });
         } else if (declaration.type == 'const') {
             result.push({
@@ -86,7 +90,8 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): Symbol
                     lsp.SymbolKind.Constant,
                     declaration.range,
                     declaration.range
-                )
+                ),
+                funcType: inferVariableTypeFromDeclaration(declaration.node.parent!)
             });
         }
     }

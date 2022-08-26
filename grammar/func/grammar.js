@@ -38,20 +38,20 @@ module.exports = grammar({
 
     global_var_declarations: $ => seq(
       'global',
-      commaSep1($._global_var_declaration),
+      commaSep1($.global_var_declaration),
       ';'
     ),
-    _global_var_declaration: $ => seq(
+    global_var_declaration: $ => seq(
       field('type', optional($._type)),
       field('name', $.identifier),
     ),
 
     constant_declarations: $ => seq(
       'const',
-      commaSep1($._constant_declaration),
+      commaSep1($.constant_declaration),
       ';'
     ),
-    _constant_declaration: $ => seq(
+    constant_declaration: $ => seq(
       field('type', optional($.constant_type)),
       field('name', $.identifier),
       '=',

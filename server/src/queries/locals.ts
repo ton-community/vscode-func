@@ -1,4 +1,5 @@
 import * as Parser from 'web-tree-sitter';
+import { FuncType, inferVariableTypeFromDeclaration } from '../features/typeInference';
 
 export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.Point) {
     let descendant: Parser.SyntaxNode | null = rootNode.descendantForPosition(cursorPosition);
@@ -7,6 +8,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
         node: Parser.SyntaxNode,
         declaration: Parser.SyntaxNode,
         kind: 'variable',
+        type: FuncType,
         text: string
     }[] = [];
 
@@ -30,6 +32,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
                         declaration: varDec,
                         kind: 'variable' as 'variable', // Typescript wtf???
                         text: a.text,
+                        type: inferVariableTypeFromDeclaration(varDec)
                     })))
                 }
             }
@@ -37,7 +40,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
 
         descendant = descendant.parent;
         if (descendant && descendant.type === 'function_definition') {
-            let parameters = descendant.childForFieldName('agruments')?.descendantsOfType('parameter_declaration') || [];
+            let parameters = descendant.childForFieldName('arguments')?.descendantsOfType('parameter_declaration') || [];
             for (let param of parameters) {
                 let node = param.childForFieldName('name');
                 if (!node) continue;
@@ -47,6 +50,7 @@ export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.P
                     declaration: param,
                     kind: 'variable' as 'variable', // Typescript wtf???
                     text: node.text,
+                    type: inferVariableTypeFromDeclaration(param)
                 });
             }
         }
