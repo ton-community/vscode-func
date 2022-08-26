@@ -20,13 +20,28 @@ Get contextual completion hints while typing. Extension shows functions defined 
 ### Definitions
 View definitions for function or global variable using *Cmd+Click*.
 
+### Formatting
+Format code using *Cmd+Option+F*
+
 ## Building & running
 
 1. install deps using `yarn install`
 2. run `yarn watch` in terminal
 3. use debug menu in VS Code to test extension
 
+
+## What to improve?
+- [ ] Add project configuration file parsing (discussion of standard is [here](https://github.com/ton-blockchain/TIPs/issues/83))
+- [ ] Work with includes like compiler, use entrypoints from project configuration
+- [ ] Add compiler built-ins to known definitions
+- [ ] Highlight unknown identifiers as errors 
+- [ ] Uncover var and hole types like compiler does
+
 ## Release Notes
+
+#### **1.0.0**
+Large release supported by [ton-society](https://github.com/ton-society/ton-footsteps/issues/18) 🚀
+Added new FunC syntax, formatter and improved completion. Find more at [changelog](./CHANGELOG.md).
 
 #### **0.2.2**
 Fixed autocomplete with function arguments, minor highlighting bugs.

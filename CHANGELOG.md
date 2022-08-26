@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.0.0]
+- New FunC syntax: constants, strings and compiler directives
+- Simple includes analysis
+- Refactoring local variables
+- Variable type inference & type suggestions in completion
+- Code formatter 
+- Minor grammar & markdown fixes
+
 ## [0.2.2]
 Fixed autocomplete with function arguments, minor highlighting bugs.
 
