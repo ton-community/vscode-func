@@ -83,7 +83,7 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): Symbol
             });
         } else if (declaration.type == 'const') {
             result.push({
-                node: declaration.node.parent!,
+                node: declaration.node!,
                 symbol: lsp.DocumentSymbol.create(
                     declaration.text,
                     '',
@@ -91,7 +91,7 @@ export function getDocumentSymbols(document: TextDocument, trees: Trees): Symbol
                     declaration.range,
                     declaration.range
                 ),
-                funcType: inferVariableTypeFromDeclaration(declaration.node.parent!)
+                funcType: inferVariableTypeFromDeclaration(declaration.node!)
             });
         }
     }
