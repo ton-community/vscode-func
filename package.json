@@ -3,7 +3,7 @@
     "displayName": "FunC Language Support",
     "description": "This extension enables support for FunC in VS Code.",
     "icon": "logo.png",
-    "version": "0.2.2",
+    "version": "1.0.0-alpha",
     "engines": {
         "vscode": "^1.63.0"
     },
@@ -23,11 +23,6 @@
         "email": "danila@whalescorp.com",
         "url": "https://github.com/dvlkv"
     },
-    "workspaces": [
-        "grammar/func",
-        "server",
-        "client"
-    ],
     "publisher": "tonwhales",
     "scripts": {
         "vscode:prepublish": "yarn compile",
@@ -93,9 +88,7 @@
     },
     "devDependencies": {
         "typescript": "^4.7.4",
-        "vscode": "^1.1.37"
-    },
-    "dependencies": {
+        "vscode": "^1.1.37",
         "tree-sitter-cli": "^0.20.6"
     }
 }
