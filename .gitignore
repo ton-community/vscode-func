@@ -1,7 +1,7 @@
 node_modules
 *.vsix
-out/
 .DS_Store
+dist/
 
 # Yarn >2.0.0
 .yarn

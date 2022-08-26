@@ -10,7 +10,6 @@
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.23",
-		"@types/vscode": "^1.63.0",
-		"@vscode/test-electron": "^2.1.2"
+		"@types/vscode": "^1.63.0"
 	}
 }

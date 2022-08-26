@@ -38,8 +38,8 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			fileEvents: workspace.createFileSystemWatcher('**/.func.yml')
 		},
 		initializationOptions: {
-			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './server/node_modules/web-tree-sitter/tree-sitter.wasm').fsPath,
-            langUri: vscode.Uri.joinPath(context.extensionUri,  './server/tree-sitter-func.wasm').fsPath,
+			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './dist/tree-sitter.wasm').fsPath,
+            langUri: vscode.Uri.joinPath(context.extensionUri,  './dist/tree-sitter-func.wasm').fsPath,
 			databaseName
 		}
 	};

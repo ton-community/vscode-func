@@ -1,6 +1,12 @@
-.vscode/**
-.vscode-test/**
-.gitignore
-vsc-extension-quickstart.md
-grammar/
-.yarn/
+**/*
+
+# Include only this files
+!dist/
+!LICENSE
+!CHANGELOG.md
+!package.json
+!README.md
+!language-configuration.json
+!syntaxes/
+!snippets/
+!logo.png
