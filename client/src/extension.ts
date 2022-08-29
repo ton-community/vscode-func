@@ -45,7 +45,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 	};
 
 	const serverModule = context.asAbsolutePath(
-		path.join('server', 'out', 'server.js')
+		path.join('dist', 'server.js')
 	);
 
 	// pass initial configuration to env
