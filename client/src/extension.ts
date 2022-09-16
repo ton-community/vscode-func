@@ -15,6 +15,11 @@ let client: LanguageClient;
 
 
 export function activate(context: vscode.ExtensionContext) {
+	vscode.commands.registerCommand('func.copyToClipboard', (str: string) => {
+		vscode.env.clipboard.writeText(str);
+		vscode.window.showInformationMessage(`Copied ${str} to clipboard`);
+	})
+
     startServer(context)
 }
 
@@ -77,9 +82,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		clientOptions
 	);
 
-	disposables.push(client.start());
-
-	await client.onReady();
+	await client.start();
 
 	// serve fileRead request
 	client.onRequest('file/read', async raw => {

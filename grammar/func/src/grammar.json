@@ -2186,11 +2186,11 @@
     },
     "number_string_literal": {
       "type": "PATTERN",
-      "value": "\"[^\"]*\"(H|h|c|u)"
+      "value": "\"[^\"]*\"[Hhcu]"
     },
     "slice_string_literal": {
       "type": "PATTERN",
-      "value": "\"[^\"]*\"(s|a)"
+      "value": "\"[^\"]*\"[sa]"
     },
     "identifier": {
       "type": "PATTERN",

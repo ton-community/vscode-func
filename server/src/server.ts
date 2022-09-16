@@ -16,6 +16,7 @@ import { initParser } from './parser';
 import { Trees } from './trees';
 import { RenameProvider } from './features/rename';
 import { mutateConfig } from './config';
+import { CodeLensProvider } from './features/codeLens';
 
 
 const features: { register(connection: Connection): any }[] = [];
@@ -37,6 +38,7 @@ connection.onInitialize(async (params: InitializeParams) => {
 	features.push(new DefinitionProvider(documents, trees, symbolIndex, depsIndex));
 	features.push(new FormattingProvider(documents, trees));
 	features.push(new RenameProvider(documents, trees, symbolIndex));
+	features.push(new CodeLensProvider(documents, trees));
 
 	// manage configuration
 	connection.onNotification('configuration/change', (config) => {

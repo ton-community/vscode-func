@@ -75,8 +75,8 @@ module.exports = grammar({
     ),
 
     string_literal: $ => /"[^"]*"/,
-    number_string_literal: $ => /"[^"]*"(H|h|c|u)/,
-    slice_string_literal: $ => /"[^"]*"(s|a)/,
+    number_string_literal: $ => /"[^"]*"[Hhcu]/,
+    slice_string_literal: $ => /"[^"]*"[sa]/,
 
     // actually FunC identifiers are much more flexible
     identifier: $ => /(`.*`)|([a-zA-Z_](\w|['?:])+)|([a-zA-Z])/,

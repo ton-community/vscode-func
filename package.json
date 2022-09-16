@@ -31,6 +31,11 @@
         "watch": "webpack --watch",
         "lint": "eslint ./client/src ./server/src --ext .ts,.tsx"
     },
+    "workspaces": [
+        "./grammar/func",
+        "./server",
+        "./client"
+    ],
     "main": "./dist/client",
     "contributes": {
         "languages": [
