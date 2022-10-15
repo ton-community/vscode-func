@@ -39,6 +39,12 @@ Format code using *Cmd+Option+F*
 
 ## Release Notes
 
+#### **1.1.0**
+Added CodeLens for numeric string literals.
+
+#### **1.0.1**
+Hotfix language server crash.
+
 #### **1.0.0**
 Large release supported by [ton-society](https://github.com/ton-society/ton-footsteps/issues/18) 🚀
 Added new FunC syntax, formatter and improved completion. Find more at [changelog](./CHANGELOG.md).

@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.1.0]
+- Show string literal numeric values
+- Markup fixes
+
+## [1.0.1]
+- Hot-fix language server crash
+
 ## [1.0.0]
 - New FunC syntax: constants, strings and compiler directives
 - Simple includes analysis
