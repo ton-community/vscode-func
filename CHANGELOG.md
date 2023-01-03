@@ -1,5 +1,10 @@
 # Change Log
 
+## [Unreleased]
+
+### Fixed
+- Better identifier regexp in grammar
+
 ## [1.1.0]
 - Show string literal numeric values
 - Markup fixes
