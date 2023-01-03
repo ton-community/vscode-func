@@ -29,6 +29,7 @@
         "compile": "webpack",
         "grammar:compile": "yarn workspace func-language build && cp grammar/func/tree-sitter-func.wasm server/tree-sitter-func.wasm",
         "watch": "webpack --watch",
+        "release": "release-it",
         "lint": "eslint ./client/src ./server/src --ext .ts,.tsx"
     },
     "workspaces": [
@@ -92,13 +93,28 @@
         }
     },
     "devDependencies": {
+        "@release-it/keep-a-changelog": "^3.1.0",
         "copy-webpack-plugin": "^11.0.0",
         "path-browserify": "^1.0.1",
+        "release-it": "^15.6.0",
         "tree-sitter-cli": "^0.20.6",
         "ts-loader": "^9.3.1",
         "typescript": "^4.7.4",
         "vscode": "^1.1.37",
         "webpack": "^5.74.0",
         "webpack-cli": "^4.10.0"
+    },
+    "release-it": {
+        "git": {
+            "commitMessage": "chore: release v${version}"
+        },
+        "github": {
+            "release": true
+        },
+        "plugins": {
+            "@release-it/keep-a-changelog": {
+                "filename": "CHANGELOG.md"
+            }
+        }
     }
 }

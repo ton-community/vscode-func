@@ -2194,7 +2194,7 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "(`.*`)|([a-zA-Z_](\\w|['?:])+)|([a-zA-Z])"
+      "value": "(`[^`]+`)|([a-zA-Z_$](\\w|['?:$])+)|([a-zA-Z])"
     },
     "underscore": {
       "type": "STRING",
