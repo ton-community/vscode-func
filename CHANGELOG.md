@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [1.1.1] - 2023-01-03
 
 ### Fixed
 - Better identifier regexp in grammar
