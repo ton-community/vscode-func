@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [1.1.2] - 2023-02-13
 ### Fixed
 - Windows url detection
 
