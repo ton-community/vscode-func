@@ -1761,7 +1761,7 @@ __metadata:
 
 "fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -3376,7 +3376,7 @@ __metadata:
 
 "resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>":
   version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -3466,6 +3466,7 @@ __metadata:
     typescript: ^4.6.3
     vscode-languageserver: ^8.0.2
     vscode-languageserver-textdocument: ^1.0.7
+    vscode-uri: ^3.0.7
     web-tree-sitter: ^0.20.5
   languageName: unknown
   linkType: soft
@@ -3865,11 +3866,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>":
   version: 4.8.2
-  resolution: "typescript@patch:typescript@npm%3A4.8.2#~builtin<compat/typescript>::version=4.8.2&hash=f456af"
+  resolution: "typescript@patch:typescript@npm%3A4.8.2#~builtin<compat/typescript>::version=4.8.2&hash=3b564f"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6f49363af8af2fe480da1d5fa68712644438785208b06690a3cbe5e7365fd652c3a0f1e587bc8684d78fb69de3dde4de185c0bad7bb4f3664ddfc813ce8caad6
+  checksum: 28e130a49d9330b64b8229ad336247bf980e9a705c5850f30a859a68c051e8e68e367b3275f119da4a825dca71ad0fe315964a1315d4a381c0021bca5eeeb62e
   languageName: node
   linkType: hard
 
@@ -3979,6 +3980,13 @@ __metadata:
   bin:
     installServerIntoExtension: bin/installServerIntoExtension
   checksum: f564417bf08f5400e8381b6d0defb4e7242a04525696b1728b05524b89932047af625fac07715b4d36307e1de599cbef54d240c15101fe831aaface431f21e1b
+  languageName: node
+  linkType: hard
+
+"vscode-uri@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "vscode-uri@npm:3.0.7"
+  checksum: c899a0334f9f6ba53021328e083f6307978c09b94407d7e5fe86fcd8fcb8f1da0cb344123a335e55769055007a46d51aff83f9ee1dfc0296ee54b78f34ef0e4f
   languageName: node
   linkType: hard
 

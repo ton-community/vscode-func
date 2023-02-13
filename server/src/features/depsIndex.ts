@@ -3,12 +3,12 @@ import * as Parser from 'web-tree-sitter';
 import { DocumentStore } from '../documentStore';
 import { queryDirectives } from '../queries/directives';
 import { Trees } from '../trees';
-import { normalize as normalizePath } from 'path';
+import { Utils, URI } from 'vscode-uri';
 
 function resolvePathSegment(documentUri: string, path: string) {
 	let result = documentUri.split('/').slice(0, -1).join('/').substring('file://'.length);
 	
-	return 'file://' + normalizePath(result + '/' + path);
+	return Utils.joinPath(URI.parse(result), '/',  path).toString();
 }
 
 export class DepsIndex {
