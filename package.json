@@ -119,5 +119,6 @@
                 "filename": "CHANGELOG.md"
             }
         }
-    }
+    },
+    "packageManager": "yarn@3.4.1"
 }
