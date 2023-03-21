@@ -1,5 +1,9 @@
 # Change Log
 
+## [Unreleased]
+### Fixed
+- $ in function and identifier names
+
 ## [1.1.2] - 2023-02-13
 ### Fixed
 - Windows url detection
