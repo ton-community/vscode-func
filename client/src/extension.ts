@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Utils } from 'vscode-uri';
 import * as path from 'path';
 import { workspace } from 'vscode';
 import {
@@ -43,8 +44,8 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			fileEvents: workspace.createFileSystemWatcher('**/.func.yml')
 		},
 		initializationOptions: {
-			treeSitterWasmUri: vscode.Uri.joinPath(context.extensionUri, './dist/tree-sitter.wasm').fsPath,
-            langUri: vscode.Uri.joinPath(context.extensionUri,  './dist/tree-sitter-func.wasm').fsPath,
+			treeSitterWasmUri: Utils.joinPath(context.extensionUri, './dist/tree-sitter.wasm').fsPath,
+            langUri: Utils.joinPath(context.extensionUri,  './dist/tree-sitter-func.wasm').fsPath,
 			databaseName
 		}
 	};
@@ -116,9 +117,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			return data;
 		} catch (err) {
 			if (err instanceof vscode.FileSystemError) {
-				if (err.code === 'FileNotFound' || err.code === 'FileIsADirectory') {
-					return { type: 'not-found' };
-				}
+				return { type: 'not-found' };
 			}
 			// graceful
 			console.warn(err);
@@ -128,7 +127,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 
 	client.onRequest('completion/matching-files', async (raw: { pathPrefix: string, uri: string }) => {
 		const uri = vscode.Uri.parse(raw.uri);
-		let searchDirName = vscode.Uri.joinPath(uri, '..', raw.pathPrefix, (raw.pathPrefix.trim().length === 0 || raw.pathPrefix.endsWith(path.sep)) ? '' : '..');
+		let searchDirName = Utils.joinPath(uri, '..', raw.pathPrefix, (raw.pathPrefix.trim().length === 0 || raw.pathPrefix.endsWith(path.sep)) ? '' : '..');
 		let toSearch = raw.pathPrefix.split(path.sep).pop() ?? '';
 
 		try {

@@ -6,7 +6,8 @@
 		"vscode": "^1.63.0"
 	},
 	"dependencies": {
-		"vscode-languageclient": "^8.0.2"
+		"vscode-languageclient": "^8.0.2",
+		"vscode-uri": "^3.0.7"
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.23",

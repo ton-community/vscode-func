@@ -54,7 +54,7 @@ const config = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: "./server/node_modules/web-tree-sitter/tree-sitter.wasm", to: distDir },
+        { from: "./node_modules/web-tree-sitter/tree-sitter.wasm", to: distDir },
        { from: "./server/tree-sitter-func.wasm", to: distDir },
       ],
     }),

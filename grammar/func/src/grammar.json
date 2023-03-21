@@ -1485,7 +1485,7 @@
     },
     "function_name": {
       "type": "PATTERN",
-      "value": "(`.*`)|((\\.|~)?(([a-zA-Z_](\\w|['?:])+)|([a-zA-Z])))"
+      "value": "(`.*`)|((\\.|~)?(([$a-zA-Z_](\\w|['?:])+)|([a-zA-Z])))"
     },
     "impure": {
       "type": "STRING",
@@ -2194,7 +2194,7 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "(`[^`]+`)|([a-zA-Z_$](\\w|['?:$])+)|([a-zA-Z])"
+      "value": "`[^`]+`|[a-zA-Z_\\$][^\\s\\+\\-\\*\\/%,\\.;\\(\\)\\{\\}\\[\\]=<>\\|\\^\\~]*"
     },
     "underscore": {
       "type": "STRING",

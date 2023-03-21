@@ -14,7 +14,7 @@ module.exports = {
     )
   ),
 
-  function_name: $ => /(`.*`)|((\.|~)?(([a-zA-Z_](\w|['?:])+)|([a-zA-Z])))/,
+  function_name: $ => /(`.*`)|((\.|~)?(([$a-zA-Z_](\w|['?:])+)|([a-zA-Z])))/,
 
   impure: $ => "impure",
   inline: $ => choice("inline", "inline_ref"),
