@@ -95,36 +95,63 @@
           }
         },
         {
-          "type": "FIELD",
-          "name": "key",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "version"
-              },
-              {
-                "type": "STRING",
-                "value": "not-version"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "key",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "version"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "not-version"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "REPEAT1",
+                  "content": {
+                    "type": "STRING",
+                    "value": " "
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "value",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "version_identifier"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "FIELD",
+              "name": "key",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "allow-post-modification"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "compute-asm-ltr"
+                  }
+                ]
               }
-            ]
-          }
-        },
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "STRING",
-            "value": " "
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "value",
-          "content": {
-            "type": "SYMBOL",
-            "name": "version_identifier"
-          }
+            }
+          ]
         }
       ]
     },
@@ -1485,7 +1512,7 @@
     },
     "function_name": {
       "type": "PATTERN",
-      "value": "(`.*`)|((\\.|~)?(([$a-zA-Z_](\\w|['?:])+)|([a-zA-Z])))"
+      "value": "(`.*`)|((\\.|~)?(([$a-zA-Z_](\\w|['?:$])+)|([a-zA-Z$])))"
     },
     "impure": {
       "type": "STRING",

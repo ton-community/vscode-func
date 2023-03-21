@@ -18,7 +18,7 @@ export function queryDirectives(node: Parser.SyntaxNode) {
         })),
         pramgas: pramgas.map(a => ({
             key: a.node.childForFieldName('key')!.text,
-            value: a.node.childForFieldName('value')!.text,
+            value: a.node.childForFieldName('value')?.text,
             node: a.node
         }))
     }

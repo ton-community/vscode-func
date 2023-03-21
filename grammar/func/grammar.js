@@ -31,9 +31,14 @@ module.exports = grammar({
     pragma_directive: $ => seq(
       '#pragma',
       repeat1(' '),
-      field('key', choice('version', 'not-version')), 
-      repeat1(' '),
-      field('value', $.version_identifier)
+      choice(
+        seq(
+          field('key', choice('version', 'not-version')), 
+          repeat1(' '),
+          field('value', $.version_identifier)
+        ),
+        field('key', choice('allow-post-modification', 'compute-asm-ltr')), 
+      ),
     ),
 
     global_var_declarations: $ => seq(

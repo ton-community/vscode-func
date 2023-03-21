@@ -1,5 +1,12 @@
 # Change Log
 
+
+## [Unreleased]
+
+### Fixed
+- new types of #pragma
+- $ in the middle of function names
+
 ## [1.1.3] - 2023-03-21
 ### Fixed
 - $ in function and identifier names

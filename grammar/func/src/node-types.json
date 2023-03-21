@@ -879,6 +879,14 @@
         "required": true,
         "types": [
           {
+            "type": "allow-post-modification",
+            "named": false
+          },
+          {
+            "type": "compute-asm-ltr",
+            "named": false
+          },
+          {
             "type": "not-version",
             "named": false
           },
@@ -890,7 +898,7 @@
       },
       "value": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "version_identifier",
@@ -1509,6 +1517,10 @@
     "named": false
   },
   {
+    "type": "allow-post-modification",
+    "named": false
+  },
+  {
     "type": "asm",
     "named": false
   },
@@ -1523,6 +1535,10 @@
   {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "compute-asm-ltr",
+    "named": false
   },
   {
     "type": "const",
