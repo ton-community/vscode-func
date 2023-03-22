@@ -1,5 +1,9 @@
 # Change Log
 
+## [Unreleased]
+### Fixed
+- function declarations parsing
+- % in function names
 
 ## [1.1.4] - 2023-03-21
 
