@@ -42,11 +42,11 @@ module.exports = {
     "->"
   ),
 
-  parameter_list: $ => prec(1, seq(
+  parameter_list: $ => seq(
     '(',
     commaSep($.parameter_declaration),
     ')'
-  )),
+  ),
 
   parameter_list_relaxed: $ => seq(
     '(',
