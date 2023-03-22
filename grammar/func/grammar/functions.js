@@ -1,20 +1,28 @@
-const {commaSep, commaSep1, commaSep2} = require('./utils.js')
+const { commaSep, commaSep1, commaSep2 } = require('./utils.js')
 
 module.exports = {
   function_definition: $ => seq(
     field("type_variables", optional($.type_variables_list)),
     field("return_type", $._type),
     field("name", $.function_name),
-    field("arguments", $.parameter_list),
-    field("specifiers", optional($.specifiers_list)),
     choice(
-      ';',
-      field("body", $.block_statement),
-      field("asm_body", $.asm_function_body)
+      seq(
+        field("arguments", $.parameter_list),
+        field("specifiers", optional($.specifiers_list)),
+        choice(
+          field("body", $.block_statement),
+          field("asm_body", $.asm_function_body)
+        )
+      ),
+      seq(
+        field("arguments", $.parameter_list_relaxed),
+        field("specifiers", optional($.specifiers_list)),
+        ';',
+      )
     )
   ),
 
-  function_name: $ => /(`.*`)|((\.|~)?(([$a-zA-Z_](\w|['?:$])+)|([a-zA-Z$])))/,
+  function_name: $ => /(`.*`)|((\.|~)?(([$%a-zA-Z_](\w|['?:$%])+)|([a-zA-Z%$])))/,
 
   impure: $ => "impure",
   inline: $ => choice("inline", "inline_ref"),
@@ -23,8 +31,8 @@ module.exports = {
   )),
 
   specifiers_list: $ => choice(
-    seq($.impure, optional($.inline), optional($.method_id)), 
-    seq($.inline, optional($.method_id)), 
+    seq($.impure, optional($.inline), optional($.method_id)),
+    seq($.inline, optional($.method_id)),
     $.method_id
   ),
 
@@ -34,17 +42,31 @@ module.exports = {
     "->"
   ),
 
-  parameter_list: $ => seq(
+  parameter_list: $ => prec(1, seq(
     '(',
     commaSep($.parameter_declaration),
+    ')'
+  )),
+
+  parameter_list_relaxed: $ => seq(
+    '(',
+    commaSep(
+      choice(
+        $.parameter_declaration,
+        field('name', $.identifier),
+        $.underscore
+      )
+    ),
     ')'
   ),
 
   parameter_declaration: $ => seq(
-    optional(field('type', $._type)),
-    choice(
-      field('name', $.identifier),
-      $.underscore
+    field('type', $._type),
+    optional(
+      choice(
+        field('name', $.identifier),
+        $.underscore
+      )
     )
   ),
 

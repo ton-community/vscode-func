@@ -100,5 +100,11 @@ module.exports = grammar({
         multiline_comment
       ));
     }
-  }
+  },
+
+  conflicts: $ => [
+    [$.parameter_list_relaxed, $.type_identifier],
+    [$.parameter_list_relaxed, $.hole_type],
+    [$.parameter_list_relaxed, $.parameter_list]
+  ]
 });
