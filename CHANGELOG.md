@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [1.1.6] - 2023-09-25
 ### Fixed
 - Updated tree-sitter to work with Node >18.1
 
