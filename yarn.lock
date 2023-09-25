@@ -2094,6 +2094,7 @@ __metadata:
     "@types/node": ^17.0.23
     "@types/vscode": ^1.63.0
     vscode-languageclient: ^8.0.2
+    vscode-uri: ^3.0.7
   languageName: unknown
   linkType: soft
 
@@ -3151,7 +3152,7 @@ __metadata:
     copy-webpack-plugin: ^11.0.0
     path-browserify: ^1.0.1
     release-it: ^15.6.0
-    tree-sitter-cli: ^0.20.6
+    tree-sitter-cli: ^0.20.8
     ts-loader: ^9.3.1
     typescript: ^4.7.4
     vscode: ^1.1.37
@@ -6331,7 +6332,7 @@ __metadata:
     vscode-languageserver: ^8.0.2
     vscode-languageserver-textdocument: ^1.0.7
     vscode-uri: ^3.0.7
-    web-tree-sitter: ^0.20.5
+    web-tree-sitter: ^0.20.8
   languageName: unknown
   linkType: soft
 
@@ -6889,6 +6890,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tree-sitter-cli@npm:^0.20.8":
+  version: 0.20.8
+  resolution: "tree-sitter-cli@npm:0.20.8"
+  bin:
+    tree-sitter: cli.js
+  checksum: 474680bf7fa906c8d0f86a5e2ef750c6b5cf7b95c7c6203b8a9bd602b0ea09e9b2698d828052a780c89fd3f456c1b22f8d6bbdb3232bc4d8cd823bc8afe5284a
+  languageName: node
+  linkType: hard
+
 "ts-jest@npm:^27.1.4":
   version: 27.1.5
   resolution: "ts-jest@npm:27.1.5"
@@ -7316,10 +7326,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-tree-sitter@npm:^0.20.5":
-  version: 0.20.7
-  resolution: "web-tree-sitter@npm:0.20.7"
-  checksum: f2949a679bbca5ecb225ab26a67ff99e6e3907fa905c6bd62bfe6d2cfa216347f8cc481efcd32f181cb6b964bc03c42f9611e16da0825bff43de389b17ff9f7f
+"web-tree-sitter@npm:^0.20.8":
+  version: 0.20.8
+  resolution: "web-tree-sitter@npm:0.20.8"
+  checksum: 300c8daf438422ff92f46b3d9768d7af84c1d680331f19ce109e48b5e4e137f1be8f9e446f13fae65afabbc61b62ed1d87f942ca1ab49d1a1aa7740817f98874
   languageName: node
   linkType: hard
 

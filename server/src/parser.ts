@@ -1,6 +1,4 @@
-import * as path from 'path';
 import * as Parser from 'web-tree-sitter';
-import { existsSync } from 'fs';
 
 
 export let language: Parser.Language

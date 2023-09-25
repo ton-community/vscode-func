@@ -1,5 +1,9 @@
 # Change Log
 
+## [Unreleased]
+### Fixed
+- Updated tree-sitter to work with Node >18.1
+
 ## [1.1.5] - 2023-03-22
 ### Fixed
 - function declarations parsing
