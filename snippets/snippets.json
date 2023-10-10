@@ -1,10 +1,10 @@
 {
-    "Recieve internal message": {
+    "Receive internal message": {
       "prefix": ["recv_internal", "main"],
       "body": ["() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {", "\t$0", "}"],
       "description": "A template for receiving internal message."
     },
-    "Recieve external message": {
+    "Receive external message": {
         "prefix": ["recv_external"],
         "body": ["() recv_external(slice in_msg) impure {", "\t$0", "}"],
         "description": "A template for receiving external message."
