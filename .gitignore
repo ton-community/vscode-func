@@ -1,6 +1,7 @@
 node_modules
 *.vsix
 .DS_Store
+.idea
 dist/
 
 # Yarn >2.0.0
