@@ -27,13 +27,13 @@
     "scripts": {
         "vscode:prepublish": "yarn compile",
         "compile": "webpack",
-        "grammar:compile": "yarn workspace func-language build && cp grammar/func/tree-sitter-func.wasm server/tree-sitter-func.wasm",
+        "grammar:compile": "yarn workspace func-language build && cp tree-sitter-func/tree-sitter-func.wasm server/tree-sitter-func.wasm",
         "watch": "webpack --watch",
         "release": "release-it",
         "lint": "eslint ./client/src ./server/src --ext .ts,.tsx"
     },
     "workspaces": [
-        "./grammar/func",
+        "./tree-sitter-func",
         "./server",
         "./client"
     ],

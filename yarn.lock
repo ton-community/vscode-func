@@ -3135,9 +3135,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"func-language@workspace:grammar/func":
+"func-language@workspace:tree-sitter-func":
   version: 0.0.0-use.local
-  resolution: "func-language@workspace:grammar/func"
+  resolution: "func-language@workspace:tree-sitter-func"
   dependencies:
     nan: ^2.16.0
     tree-sitter-cli: ^0.20.6
