@@ -68,7 +68,16 @@
 			"patterns": [
 				{
 					"name": "comment.line",
+					"match": "//(.*)"
+				},
+				{
+					"name": "comment.line",
 					"match": ";;(.*)"
+				},
+				{
+					"name": "comment.block",
+					"begin": "/\\*",
+					"end": "\\*/"
 				},
 				{
 					"name": "comment.block",

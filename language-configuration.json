@@ -1,9 +1,8 @@
 {
     "comments": {
-        // symbol used for single line comment. Remove this entry if your language does not support line comments
-        "lineComment": ";;",
-        // symbols used for start and end a block comment. Remove this entry if your language does not support block comments
-        "blockComment": [ "{-", "-}" ]
+        // (since FunC v0.5.0, Lisp-style comments were replaced to traditional ones)
+        "lineComment": "//",
+        "blockComment": [ "/*", "*/" ]
     },
     "wordPattern": "(`.*`)|([a-zA-Z_$%](\\w|['?:$%])+)|([$%a-zA-Z])",
     // symbols used as brackets

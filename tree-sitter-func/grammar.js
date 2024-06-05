@@ -90,14 +90,19 @@ module.exports = grammar({
     // multiline_comment: $ => seq('{-', repeat(choice(/./, $.multiline_comment)), '-}'),
     // unfortunately getting panic while generating parser with support for nested comments
     comment: $ => {
-      var multiline_comment = seq('{-', /[^-]*-+([^-}][^-]*-+)*/, '}') // C-style multiline comments (without nesting)
+      // multiline comments without nesting
+      var multiline_old = seq('{-', /[^-]*-+([^-}][^-]*-+)*/, '}')
+      var multiline_traditional = seq('/*', /[^*]*\*+([^*/][^*]*\*+)*/, '}')
       // manually support some nesting
-      for (var i = 0; i < 5; i++) {
-        multiline_comment = seq('{-', repeat(choice(/[^-{]/, /-[^}]/, /\{[^-]/, multiline_comment)), '-}')
+      for (var i = 0; i < 3; i++) {
+        multiline_old = seq('{-', repeat(choice(/[^-{]/, /-[^}]/, /\{[^-]/, multiline_old)), '-}')
+        multiline_traditional = seq('/*', repeat(choice(/[^*/]/, /\*[^/]/, /\/[^*]/, multiline_traditional)), '*/')
       }
       return token(choice(
-        seq(';;', /[^\n]*/), // single-line comment
-        multiline_comment
+        seq(';;', /[^\n]*/),  // single-line comments
+        seq('//', /[^\n]*/),
+        multiline_old,
+        multiline_traditional,
       ));
     }
   },

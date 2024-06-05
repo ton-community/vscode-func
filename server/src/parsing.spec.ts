@@ -43,10 +43,13 @@ begin
 {- nested -}
 end
 -}
+/* also /* nested */ end */
 
 ;; line
+// line
 
 {- ;; line and end -}
+/* // line and end */
     `)
     let comments = rootNode.children.filter(c => c.type === 'comment')
     expect(rootNode.childCount).toBe(comments.length)
