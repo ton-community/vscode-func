@@ -1,4 +1,5 @@
 (impure) @keyword
+(pure) @keyword
 "inline" @keyword
 "inline_ref" @keyword
 "method_id" @keyword

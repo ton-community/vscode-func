@@ -1007,6 +1007,10 @@
         {
           "type": "method_id",
           "named": true
+        },
+        {
+          "type": "pure",
+          "named": true
         }
       ]
     }
@@ -1648,6 +1652,10 @@
   },
   {
     "type": "number_string_literal",
+    "named": true
+  },
+  {
+    "type": "pure",
     "named": true
   },
   {

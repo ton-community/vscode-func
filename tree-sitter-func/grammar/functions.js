@@ -25,13 +25,14 @@ module.exports = {
   function_name: $ => /(`.*`)|((\.|~)?(([$%a-zA-Z_](\w|['?:$%])+)|([a-zA-Z%$])))/,
 
   impure: $ => "impure",
+  pure: $ => "pure",
   inline: $ => choice("inline", "inline_ref"),
   method_id: $ => seq("method_id", optional(
     seq('(', choice($.number_literal, $.string_literal), ')')
   )),
 
   specifiers_list: $ => choice(
-    seq($.impure, optional($.inline), optional($.method_id)),
+    seq(choice($.impure, $.pure), optional($.inline), optional($.method_id)),
     seq($.inline, optional($.method_id)),
     $.method_id
   ),

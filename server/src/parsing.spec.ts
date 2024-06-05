@@ -14,14 +14,14 @@ beforeAll(async () => {
 
 it('should parse just main()', () => {
     let rootNode = parseFunCSource(`
-int main() impure {
+int main() pure {
     return 0;
 }
 `);
     let f_main = rootNode.firstChild!
     expect(f_main.type).toBe('function_definition')
     expect(f_main.childForFieldName("return_type")?.text).toBe('int')
-    expect(f_main.childForFieldName("specifiers")?.text).toContain('impure')
+    expect(f_main.childForFieldName("specifiers")?.text).toContain('pure')
     expect(f_main.child(4)?.type).toBe('block_statement')
 })
 
@@ -61,7 +61,7 @@ int f1() { }
 
 int exported1() method_id {}
 _ exported2() impure method_id {}
-(slice, ()) exported3(int a) impure method_id(123) {}
+(slice, ()) exported3(int a) pure method_id(123) {}
 
 int main() { return f1(); } 
     `)

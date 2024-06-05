@@ -1557,6 +1557,10 @@
       "type": "STRING",
       "value": "impure"
     },
+    "pure": {
+      "type": "STRING",
+      "value": "pure"
+    },
     "inline": {
       "type": "CHOICE",
       "members": [
@@ -1620,8 +1624,17 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "impure"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "impure"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "pure"
+                }
+              ]
             },
             {
               "type": "CHOICE",
