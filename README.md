@@ -29,6 +29,10 @@ Format code using *Cmd+Option+F*
 2. run `yarn watch` in terminal
 3. use debug menu in VS Code to test extension
 
+## Developing and updating grammar
+
+See [tree-sitter-func folder](tree-sitter-func).
+
 
 ## What to improve?
 - [ ] Add project configuration file parsing (discussion of standard is [here](https://github.com/ton-blockchain/TIPs/issues/83))
