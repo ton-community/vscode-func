@@ -103,3 +103,13 @@ it('should parse pragmas', () => {
     expect(rootNode.firstChild!.type === 'compiler_directive');
     expect(rootNode.lastChild!.type === 'compiler_directive');
 })
+
+it('should parse expression 1', () => {
+    let rootNode = parseFunCSource(`
+const bb = a == 0 & b == 1 & c == 2 & d == 3;    
+    `)
+    let const_decl = rootNode.firstNamedChild!.firstNamedChild!
+    expect(rootNode.hasError()).toBeFalsy()
+    expect(const_decl.childForFieldName('name')!.text).toBe('bb')
+    expect(const_decl.childForFieldName('value')!.namedChildCount).toBe(8)
+})

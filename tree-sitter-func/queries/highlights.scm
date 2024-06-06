@@ -4,6 +4,7 @@
 "inline" @keyword
 "inline_ref" @keyword
 "method_id" @keyword
+"const" @keyword
 "asm" @keyword
 "global" @keyword
 "forall" @keyword
