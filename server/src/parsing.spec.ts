@@ -94,3 +94,12 @@ int main() { return f1(); }
         { returnTypes: ['slice', '()'], name: 'exported3', parameters: [{ type: 'int', name: 'a' }] },
     ])
 })
+
+it('should parse pragmas', () => {
+    let rootNode = parseFunCSource(`
+#pragma allow-post-modification;  // still valid, but deprecated
+#pragma remove-unused-functions;
+    `)
+    expect(rootNode.firstChild!.type === 'compiler_directive');
+    expect(rootNode.lastChild!.type === 'compiler_directive');
+})

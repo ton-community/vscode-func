@@ -85,3 +85,4 @@
 (identifier) @variable
 
 (comment) @comment
+(compiler_directive) @attribute

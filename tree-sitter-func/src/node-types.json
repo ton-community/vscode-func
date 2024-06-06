@@ -935,6 +935,10 @@
             "named": false
           },
           {
+            "type": "remove-unused-functions",
+            "named": false
+          },
+          {
             "type": "version",
             "named": false
           }
@@ -1686,6 +1690,10 @@
   {
     "type": "pure",
     "named": true
+  },
+  {
+    "type": "remove-unused-functions",
+    "named": false
   },
   {
     "type": "repeat",

@@ -37,7 +37,7 @@ module.exports = grammar({
           repeat1(' '),
           field('value', $.version_identifier)
         ),
-        field('key', choice('allow-post-modification', 'compute-asm-ltr')), 
+        field('key', choice('allow-post-modification', 'compute-asm-ltr', 'remove-unused-functions')),
       ),
     ),
 

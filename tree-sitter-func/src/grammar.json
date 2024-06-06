@@ -147,6 +147,10 @@
                   {
                     "type": "STRING",
                     "value": "compute-asm-ltr"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "remove-unused-functions"
                   }
                 ]
               }
