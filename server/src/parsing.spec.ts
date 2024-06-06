@@ -28,8 +28,10 @@ int main() pure {
 it('should parse stdlib.fc', () => {
     let rootNode = parseFunCSource(fs.readFileSync(__dirname + '/../../tree-sitter-func/examples/stdlib.fc', 'utf-8'))
     let functions = rootNode.children.filter(n => n.type === 'function_definition')
+    let builtin = functions.filter(n => n.childForFieldName('specifiers')?.text.includes('builtin'))
     expect(rootNode.hasError()).toBeFalsy()
-    expect(functions.length).toBe(175)
+    expect(functions.length).toBe(175 + 16)
+    expect(builtin.length).toBe(16)
     expect(rootNode.firstChild!.type).toBe('comment')
     expect(functions[0].firstChild?.type).toBe('type_variables_list')
     expect(functions[0].firstChild?.text).toBe('forall X ->')

@@ -1026,6 +1026,10 @@
       "required": true,
       "types": [
         {
+          "type": "builtin",
+          "named": true
+        },
+        {
           "type": "impure",
           "named": true
         },
@@ -1594,6 +1598,10 @@
   {
     "type": "builder",
     "named": false
+  },
+  {
+    "type": "builtin",
+    "named": true
   },
   {
     "type": "cell",

@@ -1671,6 +1671,10 @@
         }
       ]
     },
+    "builtin": {
+      "type": "STRING",
+      "value": "builtin"
+    },
     "pre_specifiers_list": {
       "type": "CHOICE",
       "members": [
@@ -1727,6 +1731,27 @@
                   "type": "BLANK"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "pure"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "builtin"
             }
           ]
         },

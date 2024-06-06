@@ -32,12 +32,14 @@ module.exports = {
   method_id: $ => seq("method_id", optional(
     seq('(', choice($.number_literal, $.string_literal), ')')
   )),
+  builtin: $ => "builtin",
 
   pre_specifiers_list: $ => choice(
     seq($.get),
   ),
   specifiers_list: $ => choice(
     seq(choice($.impure, $.pure), optional($.inline), optional($.method_id)),
+    seq(optional($.pure), $.builtin),
     seq($.inline, optional($.method_id)),
     $.method_id
   ),

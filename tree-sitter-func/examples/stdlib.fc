@@ -47,8 +47,15 @@ int check_data_signature(slice data, slice signature, int public_key) pure asm "
 (int, int, int, int) compute_data_size?(cell c, int max_cells) pure asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 (int, int, int, int) slice_compute_data_size?(cell c, int max_cells) pure asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 
-;; () throw_if(int excno, int cond) asm "THROWARGIF";
+() throw(int excno) builtin;
+() throw_if(int excno, int cond) builtin;
+() throw_unless(int excno, int cond) builtin;
+forall X -> () throw_arg(X x, int excno) builtin;
+forall X -> () throw_arg_if(X x, int excno, int cond) builtin;
+forall X -> () throw_arg_unless(X x, int excno, int cond) builtin;
 
+forall X -> (X, ()) ~dump(X x) builtin;
+forall X -> (X, ()) ~strdump(X x) builtin;
 () dump_stack() asm "DUMPSTK";
 
 cell get_data() pure asm "c4 PUSH";
@@ -71,12 +78,12 @@ slice begin_parse(cell c) pure asm "CTOS";
 () end_parse(slice s) asm "ENDS";
 (slice, cell) load_ref(slice s) pure asm( -> 1 0) "LDREF";
 cell preload_ref(slice s) pure asm "PLDREF";
-;; (slice, int) ~load_int(slice s, int len) pure asm(s len -> 1 0) "LDIX";
-;; (slice, int) ~load_uint(slice s, int len) pure asm( -> 1 0) "LDUX";
-;; int preload_int(slice s, int len) pure asm "PLDIX";
-;; int preload_uint(slice s, int len) pure asm "PLDUX";
-;; (slice, slice) load_bits(slice s, int len) pure asm(s len -> 1 0) "LDSLICEX";
-;; slice preload_bits(slice s, int len) pure asm "PLDSLICEX";
+(slice, int) load_int(slice s, int len) pure builtin;
+(slice, int) load_uint(slice s, int len) pure builtin;
+int preload_int(slice s, int len) pure builtin;
+int preload_uint(slice s, int len) pure builtin;
+(slice, slice) load_bits(slice s, int len) pure builtin;
+slice preload_bits(slice s, int len) pure builtin;
 (slice, int) load_grams(slice s) pure asm( -> 1 0) "LDGRAMS";
 slice skip_bits(slice s, int len) pure asm "SDSKIPFIRST";
 (slice, ()) ~skip_bits(slice s, int len) pure asm "SDSKIPFIRST";
@@ -109,8 +116,8 @@ int builder_depth(builder b) pure asm "BDEPTH";
 builder begin_cell() pure asm "NEWC";
 cell end_cell(builder b) pure asm "ENDC";
 builder store_ref(builder b, cell c) pure asm(c b) "STREF";
-;; builder store_uint(builder b, int x, int len) pure asm(x b len) "STUX";
-;; builder store_int(builder b, int x, int len) pure asm(x b len) "STIX";
+builder store_uint(builder b, int x, int len) pure builtin;
+builder store_int(builder b, int x, int len) pure builtin;
 builder store_slice(builder b, slice s) pure asm "STSLICER";
 builder store_grams(builder b, int x) pure asm "STGRAMS";
 builder store_dict(builder b, cell c) pure asm(c b) "STDICT";
