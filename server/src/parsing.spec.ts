@@ -59,26 +59,27 @@ it('should parse get methods', () => {
     let rootNode = parseFunCSource(`
 int f1() { }
 
-int exported1() method_id {}
+get int exported1() {}
 _ exported2() impure method_id {}
-(slice, ()) exported3(int a) pure method_id(123) {}
+get (slice, ()) exported3(int a) pure method_id(123) {}
 
 int main() { return f1(); } 
     `)
     // the code below is taken from ton-verifier
     const getters = rootNode.children.filter(c =>
-        c.type === "function_definition" &&
-        c.children.find(n => n.type === "specifiers_list")?.text.includes("method_id"),
+        c.type === "function_definition" && (
+            c.children.find(n => n.type === "specifiers_list")?.text.includes("method_id") ||
+            c.children.find(n => n.type === 'pre_specifiers_list')?.text.includes("get")
+        )
     );
 
     const gettersParsed = getters.map((f: Parser.SyntaxNode) => {
         return {
-            returnTypes: f.children[0].children
+            returnTypes: f.childForFieldName('return_type')!.children
                 .filter((c) => !c.type.match(/[,()]/))
                 .map((c) => c.text),
-            name: f.children.find((n) => n.type === "function_name")!.text,
-            parameters: f.children
-                .find((n) => n.type === "parameter_list")!
+            name: f.childForFieldName("name")!.text,
+            parameters: f.childForFieldName('arguments')!
                 .children.filter((c) => c.type === "parameter_declaration")
                 .map((c) => ({
                     type: c.child(0)!.text,

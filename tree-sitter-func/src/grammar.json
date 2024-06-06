@@ -1429,6 +1429,22 @@
       "members": [
         {
           "type": "FIELD",
+          "name": "pre_specifiers",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "pre_specifiers_list"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "FIELD",
           "name": "type_variables",
           "content": {
             "type": "CHOICE",
@@ -1561,6 +1577,10 @@
       "type": "STRING",
       "value": "pure"
     },
+    "get": {
+      "type": "STRING",
+      "value": "get"
+    },
     "inline": {
       "type": "CHOICE",
       "members": [
@@ -1612,6 +1632,20 @@
             },
             {
               "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "pre_specifiers_list": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "get"
             }
           ]
         }

@@ -381,6 +381,16 @@
           }
         ]
       },
+      "pre_specifiers": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pre_specifiers_list",
+            "named": true
+          }
+        ]
+      },
       "return_type": {
         "multiple": true,
         "required": true,
@@ -940,6 +950,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "pre_specifiers_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "get",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1608,6 +1633,10 @@
   },
   {
     "type": "function_name",
+    "named": true
+  },
+  {
+    "type": "get",
     "named": true
   },
   {

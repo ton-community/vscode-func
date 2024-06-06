@@ -2,6 +2,7 @@ const { commaSep, commaSep1, commaSep2 } = require('./utils.js')
 
 module.exports = {
   function_definition: $ => seq(
+    field("pre_specifiers", optional($.pre_specifiers_list)),
     field("type_variables", optional($.type_variables_list)),
     field("return_type", $._type),
     field("name", $.function_name),
@@ -26,11 +27,15 @@ module.exports = {
 
   impure: $ => "impure",
   pure: $ => "pure",
+  get: $ => "get",
   inline: $ => choice("inline", "inline_ref"),
   method_id: $ => seq("method_id", optional(
     seq('(', choice($.number_literal, $.string_literal), ')')
   )),
 
+  pre_specifiers_list: $ => choice(
+    seq($.get),
+  ),
   specifiers_list: $ => choice(
     seq(choice($.impure, $.pure), optional($.inline), optional($.method_id)),
     seq($.inline, optional($.method_id)),
