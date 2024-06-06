@@ -663,7 +663,7 @@
     }
   },
   {
-    "type": "inline",
+    "type": "inline_specifier",
     "named": true,
     "fields": {}
   },
@@ -734,7 +734,7 @@
     }
   },
   {
-    "type": "method_id",
+    "type": "method_id_specifier",
     "named": true,
     "fields": {},
     "children": {
@@ -965,7 +965,7 @@
       "required": true,
       "types": [
         {
-          "type": "get",
+          "type": "get_specifier",
           "named": true
         }
       ]
@@ -1026,23 +1026,23 @@
       "required": true,
       "types": [
         {
-          "type": "builtin",
+          "type": "builtin_specifier",
           "named": true
         },
         {
-          "type": "impure",
+          "type": "impure_specifier",
           "named": true
         },
         {
-          "type": "inline",
+          "type": "inline_specifier",
           "named": true
         },
         {
-          "type": "method_id",
+          "type": "method_id_specifier",
           "named": true
         },
         {
-          "type": "pure",
+          "type": "pure_specifier",
           "named": true
         }
       ]
@@ -1600,7 +1600,7 @@
     "named": false
   },
   {
-    "type": "builtin",
+    "type": "builtin_specifier",
     "named": true
   },
   {
@@ -1648,7 +1648,7 @@
     "named": true
   },
   {
-    "type": "get",
+    "type": "get_specifier",
     "named": true
   },
   {
@@ -1668,7 +1668,7 @@
     "named": false
   },
   {
-    "type": "impure",
+    "type": "impure_specifier",
     "named": true
   },
   {
@@ -1696,7 +1696,7 @@
     "named": true
   },
   {
-    "type": "pure",
+    "type": "pure_specifier",
     "named": true
   },
   {

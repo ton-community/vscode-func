@@ -1,10 +1,9 @@
-(impure) @keyword
-(pure) @keyword
-(get) @keyword
-(builtin) @keyword
-"inline" @keyword
-"inline_ref" @keyword
-"method_id" @keyword
+(impure_specifier) @keyword
+(pure_specifier) @keyword
+(get_specifier) @keyword
+(builtin_specifier) @keyword
+(inline_specifier) @keyword
+(method_id_specifier) @keyword
 "const" @keyword
 "asm" @keyword
 "global" @keyword
