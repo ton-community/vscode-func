@@ -42,10 +42,10 @@ it('should parse comments', () => {
     let rootNode = parseFunCSource(`
 {-
 begin
-{- nested -}
-end
--}
-/* also /* nested */ end */
+{- not nested - } ---}
+/* also /* not nested ***/
+/**/
+/****/
 
 ;; line
 // line

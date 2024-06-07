@@ -87,24 +87,14 @@ module.exports = grammar({
     identifier: $ => /`[^`]+`|[a-zA-Z_\$][^\s\+\-\*\/%,\.;\(\)\{\}\[\]=<>\|\^\~]*/,
     underscore: $ => '_',
 
-    // multiline_comment: $ => seq('{-', repeat(choice(/./, $.multiline_comment)), '-}'),
-    // unfortunately getting panic while generating parser with support for nested comments
-    comment: $ => {
-      // multiline comments without nesting
-      var multiline_old = seq('{-', /[^-]*-+([^-}][^-]*-+)*/, '}')
-      var multiline_traditional = seq('/*', /[^*]*\*+([^*/][^*]*\*+)*/, '}')
-      // manually support some nesting
-      for (var i = 0; i < 3; i++) {
-        multiline_old = seq('{-', repeat(choice(/[^-{]/, /-[^}]/, /\{[^-]/, multiline_old)), '-}')
-        multiline_traditional = seq('/*', repeat(choice(/[^*/]/, /\*[^/]/, /\/[^*]/, multiline_traditional)), '*/')
-      }
-      return token(choice(
-        seq(';;', /[^\n]*/),  // single-line comments
-        seq('//', /[^\n]*/),
-        multiline_old,
-        multiline_traditional,
-      ));
-    }
+    // comments: old (Lisp-style) and traditional; no nesting (since FunC v0.5.0)
+    // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+    comment: $ => token(choice(
+      seq(';;', /[^\r\n]*/),
+      seq('//', /[^\r\n]*/),
+      seq('{-', /[^-]*\-+([^-}][^-]*\-+)*/, '}'),
+      seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'),
+    )),
   },
 
   conflicts: $ => [
