@@ -3,6 +3,7 @@ import {
 	TextDocumentSyncKind,
 	Connection
 } from 'vscode-languageserver/node';
+import { InitializeResult } from 'vscode-languageserver-protocol';
 import { connection } from './connection';
 import { DepsIndex } from './features/depsIndex';
 import { DocumentStore } from './documentStore';
@@ -17,12 +18,16 @@ import { Trees } from './trees';
 import { RenameProvider } from './features/rename';
 import { mutateConfig } from './config';
 import { CodeLensProvider } from './features/codeLens';
+import { CodeAction } from 'vscode-languageserver';
+import { findQuickFixByKind } from './features/quickfixes';
 
 
 const features: { register(connection: Connection): any }[] = [];
 
-connection.onInitialize(async (params: InitializeParams) => {
+connection.onInitialize(async (params: InitializeParams): Promise<InitializeResult> => {
+	// while starting the server, client posted some initializationOptions; for instance, clientConfig
 	await initParser(params.initializationOptions.treeSitterWasmUri, params.initializationOptions.langUri);
+	mutateConfig(params.initializationOptions.clientConfig || {})
 
 	const documents = new DocumentStore(connection);
 	const trees = new Trees(documents);
@@ -42,7 +47,15 @@ connection.onInitialize(async (params: InitializeParams) => {
 
 	// manage configuration
 	connection.onNotification('configuration/change', (config) => {
+		// config sent from a client matches FuncPluginConfigScheme
 		mutateConfig(config);
+		// after config change, re-run all diagnostics on opened documents
+		for (let document of documents.all()) {
+			let tree = trees.getParseTree(document);
+			if (tree) {
+				diagnosticsProvider.provideDiagnostics(document, tree);
+			}
+		}
 	});
 
 	// manage symbol index. add/remove files as they are disovered and edited
@@ -55,6 +68,28 @@ connection.onInitialize(async (params: InitializeParams) => {
 		return symbolIndex.initFiles(uris);
 	});
 
+	connection.onCodeAction(params => {
+		let document = documents.get(params.textDocument.uri)
+		let tree = document ? trees.getParseTree(document) : undefined
+		if (params.context.diagnostics.length === 0 || !document || !tree) {
+			return []
+		}
+
+		let actions = [] as CodeAction[]
+		for (let diagnostic of params.context.diagnostics) {
+			// data.fixes contains an array of kind, see CollectedDiagnostics
+			if (diagnostic.data && Array.isArray(diagnostic.data.fixes)) {
+				for (let kind of diagnostic.data.fixes) {
+					let qf = findQuickFixByKind(kind)
+					if (qf) {
+						actions.push(qf.convertToCodeAction(document.uri, tree, diagnostic))
+					}
+				}
+			}
+		}
+		return actions
+	})
+
 	// on parse done
 	trees.onParseDone(async (event) => {
 		await depsIndex.update(event.document, event.tree);
@@ -64,8 +99,9 @@ connection.onInitialize(async (params: InitializeParams) => {
 	console.log('FunC language server is READY');
 	
 	return {
-		capabilities: { 
-			textDocumentSync: TextDocumentSyncKind.Incremental
+		capabilities: {
+			textDocumentSync: TextDocumentSyncKind.Incremental,
+			codeActionProvider: true,
 		}
 	};
 });

@@ -4,6 +4,9 @@ const expressions = require('./grammar/expressions.js')
 const functions = require('./grammar/functions.js')
 const statements = require('./grammar/statements.js')
 
+// It's a main grammar description, `tree-sitter generate` works based on this file.
+// Note, that grammar always parses the latest version of FunC,
+// and when some keywords (or other syntax) is unsupported, they are highlighted as error diagnostics.
 module.exports = grammar({
   name: 'func',
 

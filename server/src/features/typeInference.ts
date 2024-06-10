@@ -78,7 +78,7 @@ export function inferFunctionType(node: Parser.SyntaxNode): FuncType {
         return {
             kind: 'function',
             arguments: parameters.map(param => ({
-                name: param.childForFieldName('name')!.text,
+                name: param.childForFieldName('name')?.text,
                 type: extractType(param)
             })),
             returns: extractType(returnType!)

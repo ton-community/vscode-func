@@ -70,6 +70,20 @@
             "title": "FunC",
             "type": "object",
             "properties": {
+                "func.languageLevel": {
+                    "description": "Should match the version of the FunC compiler you are using.",
+                    "type": "string",
+                    "enum": [
+                        "v0.4.x",
+                        "v0.5.x"
+                    ],
+                    "enumDescriptions": [
+                        "v0.4.x (method_id, Lisp-style ;;comments)",
+                        "v0.5.x (`get` keyword, traditional //comments, impure by default)"
+                    ],
+                    "default": "v0.4.x",
+                    "order": 1
+                },
                 "func.symbolDiscovery": {
                     "description": "Set up how extension discovers symbols.",
                     "type": "string",

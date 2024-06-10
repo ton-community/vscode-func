@@ -10,6 +10,7 @@ import {
 	TransportKind
 } from 'vscode-languageclient/node';
 import { TextEncoder } from 'util';
+import { defaultConfig, FuncPluginConfigScheme } from 'server/src/config-scheme';
 
 
 let client: LanguageClient;
@@ -31,6 +32,18 @@ export function deactivate(): Thenable<void> | undefined {
 	return client.stop();
 }
 
+function getClientConfiguration(): FuncPluginConfigScheme {
+	let obj = {} as { [k in string]: any }
+	let w = vscode.workspace.getConfiguration('func');
+	for (let key in defaultConfig) {
+		let value = w.get(key)
+		if (value !== undefined) {
+			obj[key] = value
+		}
+	}
+	return obj as FuncPluginConfigScheme
+}
+
 async function startServer(context: vscode.ExtensionContext): Promise<vscode.Disposable> {
 	const disposables: vscode.Disposable[] = [];
 	const databaseName = context.workspaceState.get('dbName', `func_${Math.random().toString(32).slice(2)}`);
@@ -44,6 +57,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 			fileEvents: workspace.createFileSystemWatcher('**/.func.yml')
 		},
 		initializationOptions: {
+			clientConfig: getClientConfiguration(),
 			treeSitterWasmUri: Utils.joinPath(context.extensionUri, './dist/tree-sitter.wasm').fsPath,
             langUri: Utils.joinPath(context.extensionUri,  './dist/tree-sitter-func.wasm').fsPath,
 			databaseName
@@ -54,26 +68,15 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 		path.join('dist', 'server.js')
 	);
 
-	// pass initial configuration to env
-	const extConfig = vscode.workspace.getConfiguration('func');
-	const options = {
-		env: {
-			FUNC_SYMBOL_DISCOVERY: extConfig.get('symbolDiscovery'),
-			FUNC_AUTOCOMPLETE_ADD_PARENTHESES: extConfig.get('autocompleteAddParentheses'),
-			FUNC_EXPRERIMENTAL_DIAGNOSTICS: extConfig.get('experimentalDiagnostics'),
-		}
-	}
-	const debugOptions = { ...options, execArgv: ['--nolazy', '--inspect=6009'] };
     const serverOptions: ServerOptions = {
 		run: { 
 			module: serverModule, 
-			transport: TransportKind.ipc,
-			options: options
+			transport: TransportKind.ipc
 		},
 		debug: {
 			module: serverModule,
 			transport: TransportKind.ipc,
-			options: debugOptions
+			options: { execArgv: ['--nolazy', '--inspect=6009'] }	// same port as in .vscode/launch.json
 		}
 	};
     client = new LanguageClient(
@@ -152,11 +155,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<vscode.Dis
 	// notify at configuration change
 	vscode.workspace.onDidChangeConfiguration((change) => {
 		if (change.affectsConfiguration('func')) {
-			client.sendNotification('configuration/change', {
-				symbolDiscovery: vscode.workspace.getConfiguration('func').get('symbolDiscovery'),
-				autocompleteAddParentheses: vscode.workspace.getConfiguration('func').get('autocompleteAddParentheses'),
-				experimentalDiagnostics: vscode.workspace.getConfiguration('func').get('experimentalDiagnostics'),
-			});
+			client.sendNotification('configuration/change', getClientConfiguration());
 		}
 	})
 

@@ -1,16 +1,25 @@
 import * as Parser from 'web-tree-sitter';
 import { FuncType, inferVariableTypeFromDeclaration } from '../features/typeInference';
+import * as lsp from 'vscode-languageserver';
 
-export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.Point) {
+export interface FoundLocalSymbol {
+    node: Parser.SyntaxNode,
+    declaration: Parser.SyntaxNode,
+    kind: 'variable',
+    type: FuncType,
+    text: string
+}
+
+export interface FoundGlobalSymbol {
+    kind: lsp.SymbolKind
+    type: FuncType
+    name: string
+}
+
+export function findLocals(rootNode: Parser.SyntaxNode, cursorPosition: Parser.Point): FoundLocalSymbol[] {
     let descendant: Parser.SyntaxNode | null = rootNode.descendantForPosition(cursorPosition);
-    
-    let result: {
-        node: Parser.SyntaxNode,
-        declaration: Parser.SyntaxNode,
-        kind: 'variable',
-        type: FuncType,
-        text: string
-    }[] = [];
+
+    let result: FoundLocalSymbol[] = [];
 
     // navigate through parents and find their variables declared higher than cursor
     while (descendant) {
