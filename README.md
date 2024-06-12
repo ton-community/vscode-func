@@ -43,6 +43,10 @@ See [tree-sitter-func folder](tree-sitter-func).
 
 ## Release Notes
 
+#### **1.2.0**
+Added support for FunC v0.5.0, a new setting "FunC language level" ("v0.4.x" and "v0.5.x" for now), 
+as well as diagnostics/quickfixes related to language levels.
+
 #### **1.1.0**
 Added CodeLens for numeric string literals.
 
