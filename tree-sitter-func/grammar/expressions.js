@@ -17,12 +17,20 @@ module.exports = {
   )),
 
   _expr13: $ => prec(13, seq(
-    $._expr15,
+    $._expr14,
     optional(seq(
       '?',
       $.expression,
       ':',
       $._expr13
+    ))
+  )),
+
+  _expr14: $ => prec(14, seq(
+    $._expr15,
+    repeat(seq(
+      choice('&', '|', '^'),
+      $._expr15,
     ))
   )),
 
@@ -46,7 +54,7 @@ module.exports = {
     optional('-'),
     $._expr30,
     repeat(seq(
-      choice('-', '+', '|', '^'),
+      choice('-', '+'),
       $._expr30
     ))
   )),
@@ -54,7 +62,7 @@ module.exports = {
   _expr30: $ => prec.left(30, seq(
     $._expr75,
     repeat(seq(
-      choice('*', '/', '%', '~/', '^/', '~%', '^%', '/%', '&'),
+      choice('*', '/', '%', '~/', '^/', '~%', '^%', '/%'),
       $._expr75
     ))
   )),

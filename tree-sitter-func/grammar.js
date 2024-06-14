@@ -4,6 +4,9 @@ const expressions = require('./grammar/expressions.js')
 const functions = require('./grammar/functions.js')
 const statements = require('./grammar/statements.js')
 
+// It's a main grammar description, `tree-sitter generate` works based on this file.
+// Note, that grammar always parses the latest version of FunC,
+// and when some keywords (or other syntax) is unsupported, they are highlighted as error diagnostics.
 module.exports = grammar({
   name: 'func',
 
@@ -37,7 +40,7 @@ module.exports = grammar({
           repeat1(' '),
           field('value', $.version_identifier)
         ),
-        field('key', choice('allow-post-modification', 'compute-asm-ltr')), 
+        field('key', choice('allow-post-modification', 'compute-asm-ltr', 'remove-unused-functions')),
       ),
     ),
 
@@ -87,19 +90,14 @@ module.exports = grammar({
     identifier: $ => /`[^`]+`|[a-zA-Z_\$][^\s\+\-\*\/%,\.;\(\)\{\}\[\]=<>\|\^\~]*/,
     underscore: $ => '_',
 
-    // multiline_comment: $ => seq('{-', repeat(choice(/./, $.multiline_comment)), '-}'),
-    // unfortunately getting panic while generating parser with support for nested comments
-    comment: $ => {
-      var multiline_comment = seq('{-', /[^-]*-+([^-}][^-]*-+)*/, '}') // C-style multiline comments (without nesting)
-      // manually support some nesting
-      for (var i = 0; i < 5; i++) {
-        multiline_comment = seq('{-', repeat(choice(/[^-{]/, /-[^}]/, /\{[^-]/, multiline_comment)), '-}')
-      }
-      return token(choice(
-        seq(';;', /[^\n]*/), // single-line comment
-        multiline_comment
-      ));
-    }
+    // comments: old (Lisp-style) and traditional; no nesting (since FunC v0.5.0)
+    // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+    comment: $ => token(choice(
+      seq(';;', /[^\r\n]*/),
+      seq('//', /[^\r\n]*/),
+      seq('{-', /[^-]*\-+([^-}][^-]*\-+)*/, '}'),
+      seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'),
+    )),
   },
 
   conflicts: $ => [

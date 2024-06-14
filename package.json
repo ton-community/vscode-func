@@ -3,7 +3,7 @@
     "displayName": "FunC Language Support",
     "description": "This extension enables support for FunC in VS Code.",
     "icon": "logo.png",
-    "version": "1.1.6",
+    "version": "1.2.0",
     "engines": {
         "vscode": "^1.63.0"
     },
@@ -27,13 +27,13 @@
     "scripts": {
         "vscode:prepublish": "yarn compile",
         "compile": "webpack",
-        "grammar:compile": "yarn workspace func-language build && cp grammar/func/tree-sitter-func.wasm server/tree-sitter-func.wasm",
+        "grammar:compile": "yarn workspace func-language build && cp tree-sitter-func/tree-sitter-func.wasm server/tree-sitter-func.wasm",
         "watch": "webpack --watch",
         "release": "release-it",
         "lint": "eslint ./client/src ./server/src --ext .ts,.tsx"
     },
     "workspaces": [
-        "./grammar/func",
+        "./tree-sitter-func",
         "./server",
         "./client"
     ],
@@ -70,6 +70,20 @@
             "title": "FunC",
             "type": "object",
             "properties": {
+                "func.languageLevel": {
+                    "description": "Should match the version of the FunC compiler you are using.",
+                    "type": "string",
+                    "enum": [
+                        "v0.4.x",
+                        "v0.5.x"
+                    ],
+                    "enumDescriptions": [
+                        "v0.4.x (method_id, Lisp-style ;;comments)",
+                        "v0.5.x (`get` keyword, traditional //comments, impure by default)"
+                    ],
+                    "default": "v0.4.x",
+                    "order": 1
+                },
                 "func.symbolDiscovery": {
                     "description": "Set up how extension discovers symbols.",
                     "type": "string",

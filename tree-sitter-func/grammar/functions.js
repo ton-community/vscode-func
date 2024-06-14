@@ -2,6 +2,7 @@ const { commaSep, commaSep1, commaSep2 } = require('./utils.js')
 
 module.exports = {
   function_definition: $ => seq(
+    field("pre_specifiers", optional($.pre_specifiers_list)),
     field("type_variables", optional($.type_variables_list)),
     field("return_type", $._type),
     field("name", $.function_name),
@@ -24,16 +25,23 @@ module.exports = {
 
   function_name: $ => /(`.*`)|((\.|~)?(([$%a-zA-Z_](\w|['?:$%])+)|([a-zA-Z%$])))/,
 
-  impure: $ => "impure",
-  inline: $ => choice("inline", "inline_ref"),
-  method_id: $ => seq("method_id", optional(
+  impure_specifier: $ => "impure",
+  pure_specifier: $ => "pure",
+  get_specifier: $ => "get",
+  inline_specifier: $ => choice("inline", "inline_ref"),
+  method_id_specifier: $ => seq("method_id", optional(
     seq('(', choice($.number_literal, $.string_literal), ')')
   )),
+  builtin_specifier: $ => "builtin",
 
+  pre_specifiers_list: $ => choice(
+    seq($.get_specifier),
+  ),
   specifiers_list: $ => choice(
-    seq($.impure, optional($.inline), optional($.method_id)),
-    seq($.inline, optional($.method_id)),
-    $.method_id
+    seq(choice($.impure_specifier, $.pure_specifier), optional($.inline_specifier), optional($.method_id_specifier)),
+    seq(optional($.pure_specifier), $.builtin_specifier),
+    seq($.inline_specifier, optional($.method_id_specifier)),
+    $.method_id_specifier
   ),
 
   type_variables_list: $ => seq(

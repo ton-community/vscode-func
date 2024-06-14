@@ -381,6 +381,16 @@
           }
         ]
       },
+      "pre_specifiers": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pre_specifiers_list",
+            "named": true
+          }
+        ]
+      },
       "return_type": {
         "multiple": true,
         "required": true,
@@ -653,7 +663,7 @@
     }
   },
   {
-    "type": "inline",
+    "type": "inline_specifier",
     "named": true,
     "fields": {}
   },
@@ -724,7 +734,7 @@
     }
   },
   {
-    "type": "method_id",
+    "type": "method_id_specifier",
     "named": true,
     "fields": {},
     "children": {
@@ -925,6 +935,10 @@
             "named": false
           },
           {
+            "type": "remove-unused-functions",
+            "named": false
+          },
+          {
             "type": "version",
             "named": false
           }
@@ -940,6 +954,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "pre_specifiers_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "get_specifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -997,15 +1026,23 @@
       "required": true,
       "types": [
         {
-          "type": "impure",
+          "type": "builtin_specifier",
           "named": true
         },
         {
-          "type": "inline",
+          "type": "impure_specifier",
           "named": true
         },
         {
-          "type": "method_id",
+          "type": "inline_specifier",
+          "named": true
+        },
+        {
+          "type": "method_id_specifier",
+          "named": true
+        },
+        {
+          "type": "pure_specifier",
           "named": true
         }
       ]
@@ -1563,6 +1600,10 @@
     "named": false
   },
   {
+    "type": "builtin_specifier",
+    "named": true
+  },
+  {
     "type": "cell",
     "named": false
   },
@@ -1607,6 +1648,10 @@
     "named": true
   },
   {
+    "type": "get_specifier",
+    "named": true
+  },
+  {
     "type": "global",
     "named": false
   },
@@ -1623,7 +1668,7 @@
     "named": false
   },
   {
-    "type": "impure",
+    "type": "impure_specifier",
     "named": true
   },
   {
@@ -1649,6 +1694,14 @@
   {
     "type": "number_string_literal",
     "named": true
+  },
+  {
+    "type": "pure_specifier",
+    "named": true
+  },
+  {
+    "type": "remove-unused-functions",
+    "named": false
   },
   {
     "type": "repeat",

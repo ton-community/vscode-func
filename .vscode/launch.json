@@ -19,7 +19,7 @@
         ],
         "name": "Launch Extension",
         "outFiles": [
-            "${workspaceFolder}/out/**/*.js"
+            "${workspaceFolder}/dist/*.js"
         ],
         "request": "launch",
         "type": "pwa-extensionHost"

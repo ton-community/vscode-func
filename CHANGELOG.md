@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.0] - 2024-06-15
+### Added
+- Support for FunC v0.5.0
+- New setting "FunC language level"
+- Diagnostics and quickfixes for levels "0.4.x" and "0.5.x"
+
 ## [1.1.6] - 2023-09-25
 ### Fixed
 - Updated tree-sitter to work with Node >18.1

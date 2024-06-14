@@ -33,7 +33,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.",
-				"match": "\\b(if|ifnot|else|elseif|elseifnot|while|do|until|repeat|return|impure|method_id|forall|asm|inline|inline_ref)\\b"
+				"match": "\\b(if|ifnot|else|elseif|elseifnot|while|do|until|repeat|return|impure|pure|method_id|forall|asm|inline|inline_ref|get|builtin)\\b"
 			}, {
 				"name": "keyword.operator",
 				"match": "(?<=\\s)(<=>|>=|<=|!=|==|\\^>>|\\~>>|>>|<<|\\/%|\\^%|\\~%|\\^\\/|\\~\\/|\\+=|-=|\\*=|\\/=|~\\/=|\\^\\/=|%=|\\^%=|<<=|>>=|~>>=|\\^>>=|&=|\\|=|\\^=|\\^|=|~|\\/|%|-|\\*|\\+|>|<|&|\\||:|\\?)(?=\\s)"
@@ -68,7 +68,16 @@
 			"patterns": [
 				{
 					"name": "comment.line",
+					"match": "//(.*)"
+				},
+				{
+					"name": "comment.line",
 					"match": ";;(.*)"
+				},
+				{
+					"name": "comment.block",
+					"begin": "/\\*",
+					"end": "\\*/"
 				},
 				{
 					"name": "comment.block",
