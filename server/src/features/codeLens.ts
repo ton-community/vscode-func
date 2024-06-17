@@ -35,9 +35,7 @@ export class CodeLensProvider {
 			if (numberTag === 'H') {
 				result = createHash('sha256').update(text).digest('hex');
 			} else if (numberTag === 'h') {
-				result = createHash('sha256')
-					.update(text).digest()
-					.slice(0, 8).toString('hex');;
+				result = createHash('sha256').update(text).digest().slice(0, 4).toString('hex');
 			} else if (numberTag === 'u') {
 				result = Buffer.from(text).toString('hex');
 			} else if (numberTag === 'c') {
