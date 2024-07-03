@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [1.1.7] - 2024-07-03
 
 ### Fixed
 - Added search keywords to manifest

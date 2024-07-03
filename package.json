@@ -2,9 +2,14 @@
     "name": "func-vscode",
     "displayName": "FunC Language Support",
     "description": "This extension enables support for FunC in VS Code.",
-    "keywords": ["TON", "The Open Network", "FunC", "Smart contract"],
+    "keywords": [
+        "TON",
+        "The Open Network",
+        "FunC",
+        "Smart contract"
+    ],
     "icon": "logo.png",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "engines": {
         "vscode": "^1.63.0"
     },
