@@ -56,7 +56,11 @@
                     ".fc",
                     ".func"
                 ],
-                "configuration": "./language-configuration.json"
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "dark": "./icons/func.svg",
+                    "light": "./icons/func.svg"
+                }
             }
         ],
         "grammars": [
