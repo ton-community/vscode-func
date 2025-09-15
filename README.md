@@ -1,5 +1,14 @@
 # FunC Language Support for VS Code
 
+> [!WARNING]
+> This extension has been deprecated in favor of the extension
+> [`TON`](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton), please
+> see [details here](https://github.com/ton-blockchain/ton-language-server/issues/167).
+>
+> You can learn more about the [`TON`](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton)
+> extension on [`GitHub`](https://github.com/ton-blockchain/ton-language-server) or
+> the [`VS Code Marketplace`](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton).
+
 This extension enables support for FunC in VS Code.
 
 ## Features
